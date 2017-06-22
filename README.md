@@ -17,7 +17,7 @@ Or you can reload the whole List with the command /poi_reload.
 As Admin, you can grant Privs for the Player.
 All the Points will be stored at a File in your World-Directory with the name: poi.txt
 
-#Privileges
+## Privileges
 
 interact:<br>
 /poi [name]<br>
@@ -31,14 +31,14 @@ tour_guide:<br>
 /poi_reload<br>
 
 
-#Install
+## Install
 
 You have to rename the folder from "minetest_poi/" to "poi/".
 
-#Depends
+## Depends
 
 none
 
-#License
+## License
 
 License: WTFPL
