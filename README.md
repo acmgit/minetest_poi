@@ -19,16 +19,16 @@ All the Points will be stored at a File in your World-Directory with the name: p
 
 #Privileges
 
-interact:
-/poi <name>
-/poi_list <-a>
+interact:<br>
+/poi [name]<br>
+/poi_list [-a]<br>
 
-tourist:
-/poi_set <name>
+tourist:<br>
+/poi_set [name]<br>
 
-tour_guide:
-/poi_delete <name>
-/poi_reload
+tour_guide:<br>
+/poi_delete [name]<br>
+/poi_reload<br>
 
 
 #Install
