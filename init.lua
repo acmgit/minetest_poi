@@ -1,5 +1,3 @@
-dofile(minetest.get_modpath("poi") .. "/poi.lua")
-
 poi = {
 	points = {}
 }
