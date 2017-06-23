@@ -4,7 +4,7 @@ poi = {
 	points = {}
 }
 
-minetest.register_privilege("tourist", "Player set Points of Interest.")
+minetest.register_privilege("tourist", "Player may set Points of Interest.")
 minetest.register_privilege("tour_guide", "Player may delete all Points of Interest.")
 
 function poi.openlist()
