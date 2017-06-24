@@ -2,8 +2,8 @@ poi = {
 	points = {}
 }
 
-minetest.register_privilege("tourist", "Player may set Points of Interest.")
-minetest.register_privilege("tour_guide", "Player may delete all Points of Interest.")
+minetest.register_privilege("poi", "Player may set Points of Interest.")
+
 
 function poi.openlist()
 	local file = io.open(minetest.get_worldpath().."/poi.txt", "r")
@@ -33,7 +33,7 @@ poi.openlist()
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
 	description = "Set's a Point of Interest.",
-	privs = {tourist = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
 
 		local player = minetest.get_player_by_name(name)
@@ -42,8 +42,8 @@ minetest.register_chatcommand("poi_set", {
 		poi.points[poi_name] = minetest.pos_to_string(currpos)
 		poi.save()
 				
-		print(name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
-		return true, "POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored."
+		minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
+		return true, core.colorize('#ff0000',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.")
 	end,
 })
 
@@ -52,8 +52,8 @@ minetest.register_chatcommand("poi_list", {
 	description = "Shows you all Point's of Interest. Optional -a shows you all Point's of Interest with Coordinates.",
 	privs = {interact = true},
 	func = function(name, arg)
-		minetest.chat_send_player(name, "Point's of Interest are:")
-		local list = ""
+		
+		local list = "Point's of Interest are:\n"
 		
 		for key, value in pairs(poi.points) do
 
@@ -67,7 +67,7 @@ minetest.register_chatcommand("poi_list", {
 			
 		end
 		
-		minetest.chat_send_player(name, list)		
+		minetest.chat_send_player(name, core.colorize('#FF6700',list))		
 		return true
 	end,
 })
@@ -75,7 +75,7 @@ minetest.register_chatcommand("poi_list", {
 minetest.register_chatcommand("poi_delete", {
 	params = "<poi_name>",
 	description = "Deletes a Point of Interest.",
-	privs = {tour_guide = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
 	
 		if(poi_name == nil or poi_name == "") then
@@ -87,9 +87,9 @@ minetest.register_chatcommand("poi_delete", {
 		list = poi_name .. ": " .. poi.points[poi_name]
 
 		poi.points[poi_name] = nil
-		print(name .. " has deleted POI-Name: " .. list .. "\n")
+		minetest.log("action","[POI] "..name .. " has deleted POI-Name: " .. list .. "\n")
 
-		minetest.chat_send_player(name, list .. " deleted.")
+		minetest.chat_send_player(name, core.colorize('#ff0000',list .. " deleted."))
 		poi.save()	-- Write the new list at the server
 		return true
 	end,
@@ -98,14 +98,14 @@ minetest.register_chatcommand("poi_delete", {
 minetest.register_chatcommand("poi_reload", {
 	params = "",
 	description = "Loads the List of POI's new.",
-	privs = {tour_guide = true},
+	privs = {poi = true},
 	func = function(name)
 		
 		poi.points = nil
 		poi.openlist()
 		
-		print(name .. " has reloaded the POI-List\n")
-		minetest.chat_send_player(name, "POI-List reloaded.")
+		--minetest.log("action",name .. " has reloaded the POI-List\n") --this is not really improtant to know :)
+		minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
 		return true
 	end,
 })
