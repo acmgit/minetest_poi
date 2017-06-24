@@ -23,10 +23,8 @@ interact:<br>
 /poi [name]<br>
 /poi_list [-a]<br>
 
-tourist:<br>
+poi:<br>
 /poi_set [name]<br>
-
-tour_guide:<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 
