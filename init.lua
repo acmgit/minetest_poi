@@ -124,9 +124,9 @@ function poi.jump(name, poi_name)
 
 end
 
-poi.openlist()
+poi.openlist() -- Initalize the List on Start
  
-
+-- The Chatcommands to Register it in MT
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
 	description = "Set's a Point of Interest.",
