@@ -2,8 +2,8 @@ poi = {
 	points = {}
 }
 
-minetest.register_privilege("tourist", "Player may set Points of Interest.")
-minetest.register_privilege("tour_guide", "Player may delete all Points of Interest.")
+minetest.register_privilege("poi", "Player may set Points of Interest.")
+
 
 -- Loads the List of POI's
 function poi.openlist()
@@ -52,23 +52,23 @@ function poi.list(name, option)
       end
 
    end
-            
-      minetest.chat_send_player(name, list)  -- Send List to Player		
+
+      minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player		
       return true
 end
 
 -- Set's a POI
 function poi.set(name, poi_name)
-
+  
    local player = minetest.get_player_by_name(name)
    local currpos = player:getpos(name)
    
    poi.points[poi_name] = minetest.pos_to_string(currpos)
    poi.save()
-   
-   print(name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
-   minetest.chat_send_player(name, "POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.")
-   
+  
+   minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
+	 return true, core.colorize('#ff0000',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.")
+     
    return true
    
 end
@@ -86,9 +86,9 @@ function poi.delete(name, poi_name)
    
    list = poi_name .. ": " .. poi.points[poi_name]	-- Get the full Name of the PoI
    poi.points[poi_name] = nil -- and delete it
-	
-   print(name .. " has deleted POI-Name: " .. list .. "\n")
-   minetest.chat_send_player(name, list .. " deleted.")
+
+   minetest.log("action","[POI] "..name .. " has deleted POI-Name: " .. list .. "\n")
+   minetest.chat_send_player(name, core.colorize('#ff0000',list .. " deleted."))
    poi.save()	-- Write the new list at the server
 	
    return true
@@ -99,9 +99,8 @@ end
 function poi.reload(name)
    poi.points = nil -- Deletes the List of PoI's
    poi.openlist() -- and Load it new
-		
-   print(name .. " has reloaded the POI-List\n")
-   minetest.chat_send_player(name, "POI-List reloaded.")
+	
+   minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
    return true
 
 end
@@ -130,9 +129,11 @@ poi.openlist() -- Initalize the List on Start
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
 	description = "Set's a Point of Interest.",
-	privs = {tourist = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
-		poi.set(name, poi_name)
+
+      poi.set(name, poi_name)
+      
 	end,
 })
 
@@ -141,16 +142,19 @@ minetest.register_chatcommand("poi_list", {
 	description = "Shows you all Point's of Interest. Optional -a shows you all Point's of Interest with Coordinates.",
 	privs = {interact = true},
 	func = function(name, arg)
-		poi.list(name, arg)
+
+      poi.list(name, arg)
+      
 	end,
 })
 
 minetest.register_chatcommand("poi_delete", {
 	params = "<poi_name>",
 	description = "Deletes a Point of Interest.",
-	privs = {tour_guide = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
-		poi.delete(name, poi_name)
+
+      poi.delete(name, poi_name)
 		
 	end,
 })
@@ -158,9 +162,10 @@ minetest.register_chatcommand("poi_delete", {
 minetest.register_chatcommand("poi_reload", {
 	params = "",
 	description = "Loads the List of POI's new.",
-	privs = {tour_guide = true},
+	privs = {poi = true},
 	func = function(name)
-		poi.reload(name)
+
+      poi.reload(name)
 		
 	end,
 })
@@ -170,7 +175,8 @@ minetest.register_chatcommand("poi_jump", {
 	description = "Jumps to the Position of the Point of Interest.",
 	privs = {interact = true},
 	func = function(name, poi_name)
-		poi.jump(name, poi_name)
+
+      poi.jump(name, poi_name)
 
 	end,
 })

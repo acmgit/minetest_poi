@@ -10,8 +10,8 @@ With /poi_list -a you can see it additional with the Coordinates in the World.
 
 To Jump now to the PoI's, use the command /poi <Name>.
 
-If you have the Privs, you can set a Point of Interest with the command /poi_set <Name>.
-And with additional Privs you can delete PoI's with the command /poi_delete <Name>.
+If you have the Privs, you can organize Point of Interest with the command /poi_set <Name>
+and /poi_delete <Name>.
 Or you can reload the whole List with the command /poi_reload. 
 
 As Admin, you can grant Privs for the Player.
@@ -23,10 +23,8 @@ interact:<br>
 /poi [name]<br>
 /poi_list [-a]<br>
 
-tourist:<br>
+poi:<br>
 /poi_set [name]<br>
-
-tour_guide:<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 
