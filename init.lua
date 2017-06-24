@@ -67,10 +67,9 @@ function poi.set(name, poi_name)
    poi.save()
   
    minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
-	 return true, core.colorize('#ff0000',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.")
-     
+   minetest.chat_send_player(name, core.colorize('#ff0000',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored."))
    return true
-   
+     
 end
 
 -- Deletes a POI
@@ -132,7 +131,7 @@ minetest.register_chatcommand("poi_set", {
 	privs = {poi = true},
 	func = function(name, poi_name)
 
-      poi.set(name, poi_name)
+		poi.set(name, poi_name)
       
 	end,
 })
@@ -143,7 +142,7 @@ minetest.register_chatcommand("poi_list", {
 	privs = {interact = true},
 	func = function(name, arg)
 
-      poi.list(name, arg)
+		poi.list(name, arg)
       
 	end,
 })
@@ -154,7 +153,7 @@ minetest.register_chatcommand("poi_delete", {
 	privs = {poi = true},
 	func = function(name, poi_name)
 
-      poi.delete(name, poi_name)
+		poi.delete(name, poi_name)
 		
 	end,
 })
@@ -165,7 +164,7 @@ minetest.register_chatcommand("poi_reload", {
 	privs = {poi = true},
 	func = function(name)
 
-      poi.reload(name)
+		poi.reload(name)
 		
 	end,
 })
@@ -176,7 +175,7 @@ minetest.register_chatcommand("poi_jump", {
 	privs = {interact = true},
 	func = function(name, poi_name)
 
-      poi.jump(name, poi_name)
+		poi.jump(name, poi_name)
 
 	end,
 })
