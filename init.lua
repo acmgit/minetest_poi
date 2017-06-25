@@ -37,7 +37,7 @@ function poi.list(name, option)
    
    minetest.chat_send_player(name, "Point's of Interest are:")
 
-   if(arg == "-a") then			-- Set Flag for Option all
+   if(option == "-a") then			-- Set Flag for Option all
       all = true
    
    end
