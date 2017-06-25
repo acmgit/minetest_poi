@@ -135,7 +135,7 @@ function poi.jump(name, poi_name)
 end
 
 -- Changes a POI-Position
-function poi.change_pos(name, poi_name)
+function poi.move(name, poi_name)
      
    local exist = false
       
@@ -152,8 +152,8 @@ function poi.change_pos(name, poi_name)
    poi.points[poi_name] = minetest.pos_to_string(currpos)
    poi.save()
   
-   minetest.log("action","[POI] "..name .. " has changed the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n")
-   minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. oldpos .." changed to Position: " .. minetest.pos_to_string(currpos) .."\n"))
+   minetest.log("action","[POI] "..name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n")
+   minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. oldpos .." moved to Position: " .. minetest.pos_to_string(currpos) .."\n"))
    return true
 
 end
@@ -229,13 +229,13 @@ minetest.register_chatcommand("poi_jump", {
 	end,
 })
 
-minetest.register_chatcommand("poi_change_pos", {
+minetest.register_chatcommand("poi_move", {
 	params = "<POI-Name>",
 	description = "Changes the Position of the Point of Interest.",
 	privs = {interact = true},
 	func = function(name, poi_name)
 
-		poi.change_pos(name, poi_name)
+		poi.move(name, poi_name)
 
 	end,
 })

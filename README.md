@@ -12,8 +12,8 @@ To Jump now to the PoI's, use the command /poi_jump [Name].
 
 If you have the Privs, you can organize Point of Interest with the command /poi_set [Name]
 and /poi_delete [Name].
-Or you can reload the whole List with the command /poi_reload. 
-/poi_change_pos [Name] changes the old Position of the POI to your current Position.
+Or you can reload the whole List with the command /poi_reload.<br> 
+/poi_move [Name] changes the old Position of the POI to your current Position.
  
 As Admin, you can grant Privs for the Player.
 All the Points will be stored at a File in your World-Directory with the name: poi.txt
@@ -28,7 +28,7 @@ poi:<br>
 /poi_set [name]<br>
 /poi_delete [name]<br>
 /poi_reload<br>
-/poi_change_pos [name]<br>
+/poi_move [name]<br>
 
 
 ## Install
