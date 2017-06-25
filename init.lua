@@ -134,6 +134,30 @@ function poi.jump(name, poi_name)
 
 end
 
+-- Changes a POI-Position
+function poi.change_pos(name, poi_name)
+     
+   local exist = false
+      
+   if (poi.exist(poi_name) == false) then
+	minetest.chat_send_player(name, core.colorize('#ff0000', "Unknown PoI <" .. poi_name .. ">."))
+	return false
+
+   end
+
+   local player = minetest.get_player_by_name(name)
+   local currpos = player:getpos(name)
+   local oldpos = poi.points[poi_name]
+   
+   poi.points[poi_name] = minetest.pos_to_string(currpos)
+   poi.save()
+  
+   minetest.log("action","[POI] "..name .. " has changed the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n")
+   minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. oldpos .." changed to Position: " .. minetest.pos_to_string(currpos) .."\n"))
+   return true
+
+end
+
 -- Check the PoI in the List? Return true if the Name exsists, else false
 function poi.exist(poi_name)
    local exist = true
@@ -201,6 +225,17 @@ minetest.register_chatcommand("poi_jump", {
 	func = function(name, poi_name)
 
 		poi.jump(name, poi_name)
+
+	end,
+})
+
+minetest.register_chatcommand("poi_change_pos", {
+	params = "<POI-Name>",
+	description = "Changes the Position of the Point of Interest.",
+	privs = {interact = true},
+	func = function(name, poi_name)
+
+		poi.change_pos(name, poi_name)
 
 	end,
 })
