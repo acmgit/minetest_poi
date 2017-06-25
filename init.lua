@@ -63,6 +63,14 @@ function poi.set(name, poi_name)
    local player = minetest.get_player_by_name(name)
    local currpos = player:getpos(name)
    
+   local exist = false
+      
+   if poi.exist(poi_name) then
+	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> exists."))
+	return false
+
+   end
+	
    poi.points[poi_name] = minetest.pos_to_string(currpos)
    poi.save()
   
@@ -81,17 +89,8 @@ function poi.delete(name, poi_name)
 
    end
    
-   -- Check the PoI in the List?
-   local exist = false
-   for key,value in pairs(poi.points) do
-	if key == poi_name then
-	   exits = true
-
-	end
-	
-   end
    
-   if exist == false then
+   if poi.exist(poi_name) == false then
 	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> unknown to delete."))
 	return false
    end
@@ -134,6 +133,25 @@ function poi.jump(name, poi_name)
    player:setpos(minetest.string_to_pos(Position))
    minetest.chat_send_player(name, "Moved to " .. poi_name .. ".")
    return true
+
+end
+
+-- Check the PoI in the List? Return true if the Name exsists, else false
+function poi.exist(poi_name)
+   local exist = false
+   for key,value in pairs(poi.points) do
+	if key == poi_name then
+	   exist = true
+
+	end
+	
+   end
+
+   if exist then 
+	return true
+   end
+   
+   return false
 
 end
 
