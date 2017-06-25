@@ -80,7 +80,22 @@ function poi.delete(name, poi_name)
       return false
 
    end
+   
+   -- Check the PoI in the List?
+   local exist = false
+   for key,value in pairs(poi.points) do
+	if key == poi_name then
+	   exits = true
+
+	end
 	
+   end
+   
+   if exist == false then
+	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> unknown to delete."))
+	return false
+   end
+   
    local list = ""
    
    list = poi_name .. ": " .. poi.points[poi_name]	-- Get the full Name of the PoI
