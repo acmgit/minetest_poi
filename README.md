@@ -15,7 +15,7 @@ Jumps to a Point of Interest.
 ### /poi_gui
 Opens a simple GUI, where you can Double-Click the Points to Jump.
 
-This commands demands the Priv poi:
+### This commands demands the Priv "poi":
 ### /poi_set [Name]
 Set's a new Point of Interest. You can't overwrite an existing POI.
 This Action will be logged.
