@@ -4,29 +4,21 @@ poi = {
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
+local poi_storage = minetest.get_mod_storage()
 
 -- Loads the List of POI's
 function poi.openlist()
-	local file = io.open(minetest.get_worldpath().."/poi.txt", "r")
-
-	if file then
-		local table = minetest.deserialize(file:read("*all"))
-			if type(table) == "table" then
-				poi.points = table.points
-				return
-			end
-	end
+	local list = ""
+	poi_storage:to_table()
+	list = poi_storage:get_string("poi_list")
+	poi.points = deserialize(list)
 end
 
 -- Writes the List of POI's
 function poi.save()
-	local file = io.open(minetest.get_worldpath().."/poi.txt", "w")
-	if file then
-		file:write(minetest.serialize({
-			points = poi.points
-		}))
-		file:close()
-	end
+	local list = minetest.serialize({list = poi.points})
+	poi_storage:set_string("poi_list", list)	
+	poi_storage:from_table()
 end
 
 -- List the POI's with an optional Arg
@@ -74,6 +66,7 @@ function poi.set(name, poi_name)
    poi.points[poi_name] = minetest.pos_to_string(currpos)
    poi.save()
   
+
    minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
    minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored."))
    return true
@@ -134,6 +127,43 @@ function poi.jump(name, poi_name)
 
 end
 
+
+-- shows gui with all available PoIs
+function poi.gui(player_name)
+	local list = ""
+	for key, value in pairs(poi.points) do	-- Build up the List
+   
+         list = list .. key .. ","
+      
+	end
+	minetest.show_formspec(player_name,"minetest_poi:thegui",
+				"size[4,8]" ..
+				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
+				"textlist[0.4,1;3,6;name;"..list..";selected_idx;false]"..
+				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
+)end
+
+-- Callback for formspec
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "minetest_poi:thegui" then -- The form name
+		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
+		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
+		    local i = 0
+		    local teleport = ""
+		    for key, value in pairs(poi.points) do	-- search for name of indexnumber
+		      i = i+1
+		      if i == event.index then 
+			  teleport = key
+			  break
+		      end
+		    end
+		    poi.jump(player:get_player_name(), teleport) -- gogogo :D
+		    return false
+		    
+		end
+	end
+end)
+
 -- Changes a POI-Position
 function poi.move(name, poi_name)
      
@@ -185,6 +215,16 @@ minetest.register_chatcommand("poi_set", {
 	end,
 })
 
+minetest.register_chatcommand("poi_gui", {
+	params = "",
+	description = "Show PoIs ina gui",
+	privs = {interact = true},
+	func = function(name)
+
+      poi.gui(name)
+      
+	end,
+})
 minetest.register_chatcommand("poi_list", {
 	params = "<-a>",
 	description = "Shows you all Point's of Interest. Optional -a shows you all Point's of Interest with Coordinates.",
