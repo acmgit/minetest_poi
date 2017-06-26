@@ -66,10 +66,10 @@ function poi.set(name, poi_name)
    poi.points[poi_name] = minetest.pos_to_string(currpos)
    poi.save()
   
-   minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
+   minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos).. "\n")
 	 return true, core.colorize('#ff0000',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.")
      
-   return true
+   
    
 end
 
@@ -123,6 +123,42 @@ function poi.jump(name, poi_name)
 
 end
 
+-- shows gui with all available PoIs
+function poi.gui(player_name)
+	local list = ""
+	for key, value in pairs(poi.points) do	-- Build up the List
+   
+         list = list .. key .. ","
+      
+	end
+	minetest.show_formspec(player_name,"minetest_poi:thegui",
+				"size[4,8]" ..
+				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
+				"textlist[0.4,1;3,6;name;"..list..";selected_idx;false]"..
+				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
+)end
+
+-- Callback for formspec
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "minetest_poi:thegui" then -- The form name
+		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
+		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
+		    local i = 0
+		    local teleport = ""
+		    for key, value in pairs(poi.points) do	-- search for name of indexnumber
+		      i = i+1
+		      if i == event.index then 
+			  teleport = key
+			  break
+		      end
+		    end
+		    poi.jump(player:get_player_name(), teleport) -- gogogo :D
+		    return false
+		    
+		end
+	end
+end)
+
 poi.openlist() -- Initalize the List on Start
  
 -- The Chatcommands to Register it in MT
@@ -137,6 +173,16 @@ minetest.register_chatcommand("poi_set", {
 	end,
 })
 
+minetest.register_chatcommand("poi_gui", {
+	params = "",
+	description = "Show PoIs ina gui",
+	privs = {interact = true},
+	func = function(name)
+
+      poi.gui(name)
+      
+	end,
+})
 minetest.register_chatcommand("poi_list", {
 	params = "<-a>",
 	description = "Shows you all Point's of Interest. Optional -a shows you all Point's of Interest with Coordinates.",
