@@ -5,16 +5,32 @@ A Mod for Minetest.
 This Mod adds PoI's, Point's of Interest to your World.
 If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
 
-With the Chatcommand /poi_list, you can see everytime a List of all Points of Interest.
-With /poi_list -a you can see it additional with the Coordinates in the World.
+### /poi_list
+Lists all Points of Interest.
+With the option -a, you can see the Coords of the Points too.
 
-To Jump now to the PoI's, use the command /poi_jump [Name].
+### /poi_jump [Name]
+Jumps to a Point of Interest.
 
-If you have the Privs, you can organize Point of Interest with the command /poi_set [Name]
-and /poi_delete [Name].
-Or you can reload the whole List with the command /poi_reload.<br> 
-/poi_move [Name] changes the old Position of the POI to your current Position.
- 
+### /poi_gui
+Opens a simple GUI, where you can Double-Click the Points to Jump.
+
+This commands demands the Priv poi:
+### /poi_set [Name]
+Set's a new Point of Interest. You can't overwrite an existing POI.
+This Action will be logged.
+
+### /poi_delete [Name]
+Deletes a Point of Interest. You can't delete an unknown POI.
+This Action will be logged.
+
+### /poi_move [Name]
+This command overwrites the Coordinates of the given POI with your current Coordinates.
+This Action will be logged.
+
+### /poi_reload
+If the List of POI's are in any kind corrupted, you can reload the List without a new Serverstart.
+
 As Admin, you can grant Privs for the Player.
 All the Points will be stored at a File in your World-Directory with the name: poi.txt
 
@@ -23,6 +39,7 @@ All the Points will be stored at a File in your World-Directory with the name: p
 interact:<br>
 /poi_jump [name]<br>
 /poi_list [-a]<br>
+/poi_gui<br>
 
 poi:<br>
 /poi_set [name]<br>
