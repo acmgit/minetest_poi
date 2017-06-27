@@ -5,7 +5,7 @@ local poi = {
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
 -- Loads the List of POI's
-function poi.openlist()
+local function poi_openlist()
 	local file = io.open(minetest.get_worldpath().."/poi.txt", "r")
 
 	if file then
@@ -18,7 +18,7 @@ function poi.openlist()
 end
 
 -- Writes the List of POI's
-function poi.save()
+local function poi_save()
 	local file = io.open(minetest.get_worldpath().."/poi.txt", "w")
 	if file then
 		file:write(minetest.serialize({
@@ -29,7 +29,7 @@ function poi.save()
 end
 
 -- List the POI's with an optional Arg
-function poi.list(name, option)
+local function poi_list(name, option)
 
    local list = ""
    local all = false
@@ -57,21 +57,21 @@ function poi.list(name, option)
 end
 
 -- Set's a POI
-function poi.set(name, poi_name)
+local function poi_set(name, poi_name)
   
    local player = minetest.get_player_by_name(name)
    local currpos = player:getpos(name)
    
    local exist = false
       
-   if poi.exist(poi_name) then
+   if poi_exist(poi_name) then
 	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> exists."))
 	return false
 
    end
 	
    poi.points[poi_name] = minetest.pos_to_string(currpos)
-   poi.save()
+   poi_save()
   
 
    minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
@@ -81,7 +81,7 @@ function poi.set(name, poi_name)
 end
 
 -- Deletes a POI
-function poi.delete(name, poi_name)
+local function poi_delete(name, poi_name)
 	
    if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
       minetest.chat_send_player(name, "Name of the PoI needed.")
@@ -89,7 +89,7 @@ function poi.delete(name, poi_name)
 
    end
    
-   if poi.exist(poi_name) == false then
+   if poi_exist(poi_name) == false then
 	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> unknown to delete."))
 	return false
    end
@@ -101,16 +101,16 @@ function poi.delete(name, poi_name)
 
    minetest.log("action","[POI] "..name .. " has deleted POI-Name: " .. list .. "\n")
    minetest.chat_send_player(name, core.colorize('#ff0000',list .. " deleted."))
-   poi.save()	-- Write the new list at the server
+   poi_save()	-- Write the new list at the server
 	
    return true
 	
 end
 
 -- Reload or Reset the List of PoI's and load it new
-function poi.reload(name)
+local function poi_reload(name)
    poi.points = nil -- Deletes the List of PoI's
-   poi.openlist() -- and Load it new
+   poi_openlist() -- and Load it new
 	
    minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
    return true
@@ -118,8 +118,8 @@ function poi.reload(name)
 end
 
 -- Jumps to PoI
-function poi.jump(name, poi_name)		
-   if (poi.exist(poi_name) == false) then
+function poi_jump(name, poi_name)		
+   if (poi_exist(poi_name) == false) then
       minetest.chat_send_player(name, core.colorize('#ff0000', "Unknown Point of Interest: " .. poi_name .. "."))
       return false
       			
@@ -129,14 +129,14 @@ function poi.jump(name, poi_name)
    local player = minetest.get_player_by_name(name)
    
    player:setpos(minetest.string_to_pos(Position))
-   minetest.chat_send_player(name, "Moved to " .. poi_name .. ".")
+   minetest.chat_send_player(name, core.colorize('#00ff00',"You are moved to POI: " .. poi_name .. "."))
    return true
 
 end
 
 
 -- shows gui with all available PoIs
-function poi.gui(player_name)
+local function poi_gui(player_name)
 	local list = ""
 	for key, value in pairs(poi.points) do	-- Build up the List
    
@@ -164,7 +164,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			  break
 		      end
 		    end
-		    poi.jump(player:get_player_name(), teleport) -- gogogo :D
+		    poi_jump(player:get_player_name(), teleport) -- gogogo :D
 		    return false
 		    
 		end
@@ -172,11 +172,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 -- Changes a POI-Position
-function poi.move(name, poi_name)
+local function poi_move(name, poi_name)
      
    local exist = false
       
-   if (poi.exist(poi_name) == false) then
+   if (poi_exist(poi_name) == false) then
 	minetest.chat_send_player(name, core.colorize('#ff0000', "Unknown PoI <" .. poi_name .. ">."))
 	return false
 
@@ -187,7 +187,7 @@ function poi.move(name, poi_name)
    local oldpos = poi.points[poi_name]
    
    poi.points[poi_name] = minetest.pos_to_string(currpos)
-   poi.save()
+   poi_save()
   
    minetest.log("action","[POI] "..name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n")
    minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. oldpos .." moved to Position: " .. minetest.pos_to_string(currpos) .."\n"))
@@ -196,7 +196,7 @@ function poi.move(name, poi_name)
 end
 
 -- Check the PoI in the List? Return true if the Name exsists, else false
-function poi.exist(poi_name)
+function poi_exist(poi_name)
    local exist = true
    
    local Position = poi.points[poi_name]
@@ -208,7 +208,7 @@ function poi.exist(poi_name)
 
 end
 
-poi.openlist() -- Initalize the List on Start
+poi_openlist() -- Initalize the List on Start
  
 -- The Chatcommands to Register it in MT
 minetest.register_chatcommand("poi_set", {
@@ -217,18 +217,18 @@ minetest.register_chatcommand("poi_set", {
 	privs = {poi = true},
 	func = function(name, poi_name)
 
-		poi.set(name, poi_name)
+		poi_set(name, poi_name)
       
 	end,
 })
 
 minetest.register_chatcommand("poi_gui", {
 	params = "",
-	description = "Show PoIs ina gui",
+	description = "Shows PoIs in a GUI.",
 	privs = {interact = true},
 	func = function(name)
 
-      poi.gui(name)
+      poi_gui(name)
       
 	end,
 })
@@ -238,7 +238,7 @@ minetest.register_chatcommand("poi_list", {
 	privs = {interact = true},
 	func = function(name, arg)
 
-		poi.list(name, arg)
+		poi_list(name, arg)
       
 	end,
 })
@@ -249,7 +249,7 @@ minetest.register_chatcommand("poi_delete", {
 	privs = {poi = true},
 	func = function(name, poi_name)
 
-		poi.delete(name, poi_name)
+		poi_delete(name, poi_name)
 		
 	end,
 })
@@ -260,7 +260,7 @@ minetest.register_chatcommand("poi_reload", {
 	privs = {poi = true},
 	func = function(name)
 
-		poi.reload(name)
+		poi_reload(name)
 		
 	end,
 })
@@ -271,7 +271,7 @@ minetest.register_chatcommand("poi_jump", {
 	privs = {interact = true},
 	func = function(name, poi_name)
 
-		poi.jump(name, poi_name)
+		poi_jump(name, poi_name)
 
 	end,
 })
@@ -282,7 +282,7 @@ minetest.register_chatcommand("poi_move", {
 	privs = {interact = true},
 	func = function(name, poi_name)
 
-		poi.move(name, poi_name)
+		poi_move(name, poi_name)
 
 	end,
 })
