@@ -50,7 +50,7 @@ poi:<br>
 
 ## Install
 
-You have to rename the folder from "minetest_poi/" to "poi/".
+Maybe you have to rename the folder from "minetest_poi/" to "poi/".
 
 ## Depends
 
