@@ -1,24 +1,31 @@
-poi = {
+local poi = {
 	points = {}
 }
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
-local poi_storage = minetest.get_mod_storage()
-
 -- Loads the List of POI's
 function poi.openlist()
-	local list = ""
-	poi_storage:to_table()
-	list = poi_storage:get_string("poi_list")
-	poi.points = deserialize(list)
+	local file = io.open(minetest.get_worldpath().."/poi.txt", "r")
+
+	if file then
+		local table = minetest.deserialize(file:read("*all"))
+			if type(table) == "table" then
+				poi.points = table.points
+				return
+			end
+	end
 end
 
 -- Writes the List of POI's
 function poi.save()
-	local list = minetest.serialize({list = poi.points})
-	poi_storage:set_string("poi_list", list)	
-	poi_storage:from_table()
+	local file = io.open(minetest.get_worldpath().."/poi.txt", "w")
+	if file then
+		file:write(minetest.serialize({
+			points = poi.points
+		}))
+		file:close()
+	end
 end
 
 -- List the POI's with an optional Arg
