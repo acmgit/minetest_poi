@@ -2,6 +2,8 @@
 
 A Mod for Minetest.
 
+![Screenshot 1] (textures/screenshot.jpg)
+
 This Mod adds PoI's, Point's of Interest to your World.
 If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
 
