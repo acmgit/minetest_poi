@@ -42,7 +42,7 @@ function poi.list(name, option)
    local list = ""
    local all = false -- is option -a set?
    
-   minetest.chat_send_player(name, "Point's of Interest are:")
+   minetest.chat_send_player(name, poi.count() .. " Point's of Interest are:")
 
    if(option == "-a") then			-- Set Flag for Option all
       all = true
@@ -156,7 +156,8 @@ function poi.gui(player_name)
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
 				"size[4,8]" ..
 				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
-				"textlist[0.4,1;3,6;name;"..list..";selected_idx;false]"..
+				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
+				"label[0.6,6;".. poi.count() .. " Points in List]"..
 				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
@@ -209,6 +210,47 @@ function poi.move(name, poi_name)
 
 end -- poi.move
 
+function poi.tableSort( a, b )
+	return (a.points < b.points)
+end
+
+function poi.spairs(t, order)
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do keys[#keys+1] = k end
+
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys 
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end
+
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end
+    end
+end
+
+function poi.sort(name)
+	
+	for k,v in poi.spairs(poi.points) do
+		--print(k,v)	
+		minetest.chat_send_player(name, core.colorize('#FF6700',k .. ": " .. v)) -- Send List to Player		
+	
+	end
+	
+	return true
+	
+
+end  -- poi.sort()
+
+
 -- Check the PoI in the List? Return true if the Name exsists, else false
 function poi.exist(poi_name)
    local exist = true
@@ -229,6 +271,15 @@ function poi.exist(poi_name)
 
 end -- poi.exist
 
+function poi.count()
+	local count = 0
+	for _,key in pairs(poi.points) do
+		count = count + 1
+		
+	end -- for _,key
+	
+	return count
+end -- poi.count
 
 poi.openlist() -- Initalize the List on Start
 
@@ -262,6 +313,17 @@ minetest.register_chatcommand("poi_list", {
 	func = function(name, arg)
 
 		poi.list(name, arg)
+      
+	end,
+})
+
+minetest.register_chatcommand("poi_sort", {
+	params = "",
+	description = "Shows you all Point's of Interest in a sorted list.",
+	privs = {interact = true},
+	func = function(name)
+
+		poi.sort(name)
       
 	end,
 })
