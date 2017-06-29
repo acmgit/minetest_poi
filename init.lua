@@ -49,7 +49,7 @@ function poi.list(name, option)
    
    end
    
-   for key, value in pairs(poi.points) do	-- Build up the List
+   for key, value in poi.spairs(poi.points) do	-- Build up the List
       if all then
          list = list .. key .. ": " .. value .. "\n"
       
@@ -147,7 +147,7 @@ end -- poi.jump()
 -- shows gui with all available PoIs
 function poi.gui(player_name)
 	local list = ""
-	for key, value in pairs(poi.points) do	-- Build up the List
+	for key, value in poi.spairs(poi.points) do	-- Build up the List
    
          list = list .. key .. ","
       
@@ -210,14 +210,12 @@ function poi.move(name, poi_name)
 
 end -- poi.move
 
-function poi.tableSort( a, b )
-	return (a.points < b.points)
-end
-
 function poi.spairs(t, order)
     -- collect the keys
     local keys = {}
-    for k in pairs(t) do keys[#keys+1] = k end
+    for k in pairs(t) do 
+	keys[#keys+1] = k 
+    end -- for k
 
     -- if order function given, sort by it by passing the table and keys a, b,
     -- otherwise just sort the keys 
@@ -225,7 +223,7 @@ function poi.spairs(t, order)
         table.sort(keys, function(a,b) return order(t, a, b) end)
     else
         table.sort(keys)
-    end
+    end -- if order
 
     -- return the iterator function
     local i = 0
@@ -233,23 +231,11 @@ function poi.spairs(t, order)
         i = i + 1
         if keys[i] then
             return keys[i], t[keys[i]]
-        end
-    end
-end
-
-function poi.sort(name)
+        end -- if keys
 	
-	for k,v in poi.spairs(poi.points) do
-		--print(k,v)	
-		minetest.chat_send_player(name, core.colorize('#FF6700',k .. ": " .. v)) -- Send List to Player		
-	
-	end
-	
-	return true
-	
-
-end  -- poi.sort()
-
+    end -- function()
+    
+end -- poi.spairs
 
 -- Check the PoI in the List? Return true if the Name exsists, else false
 function poi.exist(poi_name)
@@ -313,17 +299,6 @@ minetest.register_chatcommand("poi_list", {
 	func = function(name, arg)
 
 		poi.list(name, arg)
-      
-	end,
-})
-
-minetest.register_chatcommand("poi_sort", {
-	params = "",
-	description = "Shows you all Point's of Interest in a sorted list.",
-	privs = {interact = true},
-	func = function(name)
-
-		poi.sort(name)
       
 	end,
 })
