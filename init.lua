@@ -346,3 +346,18 @@ minetest.register_chatcommand("poi_move", {
 
 	end,
 })
+
+-- add button to unified_inventory
+
+if (minetest.get_modpath("unified_inventory")) then
+	unified_inventory.register_button("minetest_poi", {
+		type = "image",
+		image = "minetest_poi_button.png",
+		tooltip = "Show Points of Interest",
+		action = function(player)
+			local player_name = player:get_player_name()
+			if not player_name then return end
+			poi.gui(player_name)
+		end,
+	})
+end
