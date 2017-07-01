@@ -42,14 +42,14 @@ function poi.list(name, option)
    local list = ""
    local all = false -- is option -a set?
    
-   minetest.chat_send_player(name, "Point's of Interest are:")
+   minetest.chat_send_player(name, poi.count() .. " Point's of Interest are:")
 
    if(option == "-a") then			-- Set Flag for Option all
       all = true
    
    end
    
-   for key, value in pairs(poi.points) do	-- Build up the List
+   for key, value in poi.spairs(poi.points) do	-- Build up the List
       if all then
          list = list .. key .. ": " .. value .. "\n"
       
@@ -147,7 +147,7 @@ end -- poi.jump()
 -- shows gui with all available PoIs
 function poi.gui(player_name)
 	local list = ""
-	for key, value in pairs(poi.points) do	-- Build up the List
+	for key, value in poi.spairs(poi.points) do	-- Build up the List
    
          list = list .. key .. ","
       
@@ -156,7 +156,8 @@ function poi.gui(player_name)
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
 				"size[4,8]" ..
 				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
-				"textlist[0.4,1;3,6;name;"..list..";selected_idx;false]"..
+				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
+				"label[0.6,6;".. poi.count() .. " Points in List]"..
 				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
@@ -168,7 +169,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
 		    local i = 0
 		    local teleport = ""
-		    for key, value in pairs(poi.points) do	-- search for name of indexnumber
+		    for key, value in poi.spairs(poi.points) do	-- search for name of indexnumber
 		      i = i+1
 		      if i == event.index then 
 			  teleport = key
@@ -209,6 +210,33 @@ function poi.move(name, poi_name)
 
 end -- poi.move
 
+function poi.spairs(t, order)
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do 
+	keys[#keys+1] = k 
+    end -- for k
+
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys 
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end -- if order
+
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end -- if keys
+	
+    end -- function()
+    
+end -- poi.spairs
+
 -- Check the PoI in the List? Return true if the Name exsists, else false
 function poi.exist(poi_name)
    local exist = true
@@ -229,6 +257,15 @@ function poi.exist(poi_name)
 
 end -- poi.exist
 
+function poi.count()
+	local count = 0
+	for _,key in pairs(poi.points) do
+		count = count + 1
+		
+	end -- for _,key
+	
+	return count
+end -- poi.count
 
 poi.openlist() -- Initalize the List on Start
 
