@@ -210,6 +210,45 @@ function poi.move(name, poi_name)
 
 end -- poi.move
 
+function poi.rename(name, poi_name)
+	local oldname, newname
+		
+	if string.find(poi_name, ",") == nil then
+		minetest.chat_send_player(name, core.colorize('#ff0000',"/poi_rename: No new Name for Point given.\n"))
+		return false
+	end
+
+	oldname = poi.trim(string.sub(poi_name,1, string.find(poi_name, ",")-1))
+	
+	if not poi.exist(oldname) then
+		minetest.chat_send_player(name, core.colorize('#ff0000',"Point to rename not found.\n"))
+		return false
+	end
+	
+	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
+	
+	if newname == "" then
+		minetest.chat_send_player(name, core.colorize('#ff0000',"Invalid new Pointname.\n"))
+		return false
+	end
+
+	if poi.exist(newname) then
+		minetest.chat_send_player(name, core.colorize('#ff0000',"New Pointname already exists.\n"))
+		return false
+	end
+
+	local old_position
+	old_position = poi.points[oldname] -- get the Positioni
+	poi.points[newname] = old_position -- and make a new entry
+	
+	poi.points[oldname] = nil -- now deletes the old one
+	poi.save()			-- saves the List
+		
+	minetest.log("action","[POI] "..name .. " has renamed POI-Name: " .. oldname .. " to: " .. newname .. " - Position: " .. old_position .. "\n")
+	minetest.chat_send_player(name, core.colorize('#00ff00',"PoI-Name: " .. oldname .. " renamed to " .. newname .. " - Position: " .. old_position .. "\n"))
+
+end -- poi.rename()
+
 function poi.spairs(t, order)
     -- collect the keys
     local keys = {}
@@ -266,6 +305,12 @@ function poi.count()
 	
 	return count
 end -- poi.count
+
+function poi.trim(myString)
+	return (string.gsub(myString, "^%s*(.-)%s*$", "%1"))
+
+end -- poi.trim()
+
 
 poi.openlist() -- Initalize the List on Start
 
@@ -347,12 +392,23 @@ minetest.register_chatcommand("poi_move", {
 	end,
 })
 
+minetest.register_chatcommand("poi_rename", {
+	params = "<POI Old Name>,<POI New Name",
+	description = "Changes the Name of the Point of Interest.",
+	privs = {interact = true},
+	func = function(name, poi_name)
+
+		poi.rename(name, poi_name)
+
+	end,
+})
+
 -- add button to unified_inventory
 
 if (minetest.get_modpath("unified_inventory")) then
 	unified_inventory.register_button("minetest_poi", {
 		type = "image",
-		image = "minetest_poi_button.png",
+		image = "minetest_poi_button_32x32.png",
 		tooltip = "Show Points of Interest",
 		action = function(player)
 			local player_name = player:get_player_name()
