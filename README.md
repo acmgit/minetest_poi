@@ -30,6 +30,10 @@ This Action will be logged.
 This command overwrites the Coordinates of the given POI with your current Coordinates.
 This Action will be logged.
 
+### /poi_rename [Name1],[Name2]
+This command renames an existing Point [Name1] of Interest to Point of Interest [Name2]. [Name2] can't have the name of an already existing Point. 
+This Action will be logged.
+
 ### /poi_reload
 If the List of POI's are in any kind corrupted, you can reload the List without a new Serverstart.
 
