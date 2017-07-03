@@ -52,7 +52,7 @@ poi:<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 /poi_move [name]<br>
-
+/poi_rename [Old_Name], [New_Name]
 
 ## Install
 
