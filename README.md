@@ -41,7 +41,7 @@ As Admin, you can grant Privs for the Player.
 All the Points will be stored at a File in your World-Directory with the name: poi.txt
 
 ### /poi_validate
-Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.
+Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.<br>
 This Action will be logged.
 
 ## Privileges
