@@ -56,7 +56,7 @@ poi:<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 /poi_move [name]<br>
-/poi_rename [name1], [name2]
+/poi_rename [name1], [name2]<br>
 /poi_validate
 
 ## Install
