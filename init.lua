@@ -355,10 +355,14 @@ function poi.check_name(name)
 	if (name == "") or (name == nil) then
 		return false
 		
-	else
-		return true
+	end
+	
+	if string.find(name, "/") ~= nil then
+		return false
+	end
+	
 		
-	end -- if name
+	return true
 end -- poi.check_name()
 
 
