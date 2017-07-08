@@ -1,3 +1,4 @@
+local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
 local poi = {
 
 	points = {}
@@ -6,14 +7,32 @@ local poi = {
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
+
 -- Loads the List of POI's
 function poi.openlist()
+  
+  local load = storage:to_table()
+  poi.points = load.fields
+	  
+end -- poi.openlist()
+
+
+-- Writes the List of POI's
+function poi.save()
+  
+	storage:from_table({fields=poi.points})
+end -- poi.save()
+
+-- Loads the List of POI's  Read PoIs from the old file  --  Can be disabled in the future only for backward compatibility
+function poi.oldlist(name)
 	local file = io.open(minetest.get_worldpath().."/poi.txt", "r") -- Try to open the file
 
 	if file then -- is open?
 		local table = minetest.deserialize(file:read("*all"))
 			if type(table) == "table" then
+				poi.points = nil
 				poi.points = table.points
+				minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
 				return
 				
 			end -- if type(table)
@@ -22,19 +41,6 @@ function poi.openlist()
 	
 end -- poi.openlist()
 
--- Writes the List of POI's
-function poi.save()
-	local file = io.open(minetest.get_worldpath().."/poi.txt", "w") -- Try to write the file
-	
-	if file then -- is open?
-		file:write(minetest.serialize({
-			points = poi.points
-		}))
-		file:close()
-		
-	end -- if file
-	
-end -- poi.save()
 
 -- List the POI's with an optional Arg
 function poi.list(name, option)
@@ -366,6 +372,19 @@ minetest.register_chatcommand("poi_reload", {
 	func = function(name)
 
 		poi.reload(name)
+		
+	end,
+})
+
+-- This command can be deleted in futures version, it is only to read old lists of minetest-poi beta
+minetest.register_chatcommand("poi_import", {              
+	params = "",
+	description = "Imports the PoIs of older poi-mod version, this will delete all current PoIs",
+	privs = {poi = true},
+	func = function(name)
+                
+		poi.oldlist(name)
+		poi.save()
 		
 	end,
 })
