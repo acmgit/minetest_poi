@@ -357,7 +357,7 @@ function poi.check_name(name)
 	local valid = true
 	
 	for key, value in ipairs(namefilter) do
-		if string.find(name, value) ~= nil then
+		if string.find(string.lower(name), string.lower(value)) ~= nil then
 			valid = false
 		end -- if string.find
 		
