@@ -2,6 +2,7 @@ namefilter = {}
 
 dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
 
+local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
 local poi = {
 
 	points = {},
@@ -14,14 +15,32 @@ local poi = {
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
+
 -- Loads the List of POI's
 function poi.openlist()
+  
+  local load = storage:to_table()
+  poi.points = load.fields
+	  
+end -- poi.openlist()
+
+
+-- Writes the List of POI's
+function poi.save()
+  
+	storage:from_table({fields=poi.points})
+end -- poi.save()
+
+-- Loads the List of POI's  Read PoIs from the old file  --  Can be disabled in the future only for backward compatibility
+function poi.oldlist(name)
 	local file = io.open(minetest.get_worldpath().."/poi.txt", "r") -- Try to open the file
 
 	if file then -- is open?
 		local table = minetest.deserialize(file:read("*all"))
 			if type(table) == "table" then
+				poi.points = nil
 				poi.points = table.points
+				minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
 				return
 				
 			end -- if type(table)
@@ -30,19 +49,6 @@ function poi.openlist()
 			
 end -- poi.openlist()
 
--- Writes the List of POI's
-function poi.save()
-	local file = io.open(minetest.get_worldpath().."/poi.txt", "w") -- Try to write the file
-	
-	if file then -- is open?
-		file:write(minetest.serialize({
-			points = poi.points
-		}))
-		file:close()
-		
-	end -- if file
-	
-end -- poi.save()
 
 -- Helpfunction to Filter all forbidden Names
 function poi.list_filter(name)
@@ -100,13 +106,7 @@ function poi.set(name, poi_name)
 	return false -- Name exists, leave function
 
    end -- if poi.exist
-
-   if not poi.check_name(poi_name) then
-	minetest.chat_send_player(name, core.colorize('#ff0000', "Invalid Name for PoI."))   
-	return false
 	
-   end -- if poi.check_name
-   
    poi.points[poi_name] = minetest.pos_to_string(currpos) -- Insert the new Entry
    poi.save() -- and write the new List
   
@@ -120,8 +120,8 @@ end -- poi.set()
 -- Deletes a POI
 function poi.delete(name, poi_name)
 	
-   if not poi.check_name(poi_name) then
-      minetest.chat_send_player(name, "Invalid Name of PoI.")
+   if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
+      minetest.chat_send_player(name, "Name of the PoI needed.")
       return false -- can't delete a non-existing Entry, leave function
 
    end
@@ -226,6 +226,7 @@ function poi.move(name, poi_name)
 
    end -- if poi.exist
 
+   local exist = false
    local player = minetest.get_player_by_name(name)
    local currpos = player:getpos(name)
    local oldpos = poi.points[poi_name]
@@ -256,7 +257,7 @@ function poi.rename(name, poi_name)
 	
 	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
 	
-	if not poi.check_name(newname) then
+	if newname == "" then
 		minetest.chat_send_player(name, core.colorize('#ff0000',"Invalid new Pointname.\n"))
 		return false
 	end
@@ -313,51 +314,17 @@ function poi.exist(poi_name)
       exist = false
       
    else
-	local Position = poi.points[poi_name]
-	if(Position == nil or Position == "") then
-		exist = false 
+	  local Position = poi.points[poi_name]
+	  if(Position == nil or Position == "") then
+		  exist = false
+      
+	  end -- if Position == nil
 	
-	end -- if Position == nil
-	
-   end -- if poi_name ==
+  end -- if poi_name ==
    
    return exist
 
 end -- poi.exist
-
--- Checks the List and deletes invalid Poi's
-function poi.validate(name)
-	local count = 0 -- Value of invalid Entrys
-	local key, value
-	
-	for key, value in pairs(poi.points) do
-		if not poi.check_name(key) then -- is the Name valid?
-			count = count + 1
-			poi.points[key] = nil
-		
-		else
-			if value == nil then -- is the Position of the PoI valid?
-				count = count + 1
-				poi.points[key] = nil
-				
-			end -- if value
-			
-		end -- if check_name
-		
-	end -- for key,value
-	
-	if count > 0 then
-		minetest.log("action","[POI] ".. name .. " has deleted with validate " .. count .. " PoI's.\n")
-		minetest.chat_send_player(name, core.colorize('#ff0000', count .. " invalid PoI's found and deleted.\n"))
-		poi.save()
-		
-	else
-		minetest.chat_send_player(name, core.colorize('#00ff00', "No invalid PoI found.\n"))
-		
-	end
-					
-end -- poi.validate
-		
 
 function poi.count()
 	local count = 0
@@ -394,10 +361,8 @@ function poi.check_name(name)
 	
 end -- poi.check_name()
 
-
 poi.openlist() -- Initalize the List on Start
 
--- The Chatcommands to Register it in MT
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
 	description = "Set's a Point of Interest.",
@@ -448,6 +413,19 @@ minetest.register_chatcommand("poi_reload", {
 	func = function(name)
 
 		poi.reload(name)
+		
+	end,
+})
+
+-- This command can be deleted in futures version, it is only to read old lists of minetest-poi beta
+minetest.register_chatcommand("poi_import", {              
+	params = "",
+	description = "Imports the PoIs of older poi-mod version, this will delete all current PoIs",
+	privs = {poi = true},
+	func = function(name)
+                
+		poi.oldlist(name)
+		poi.save()
 		
 	end,
 })
@@ -508,7 +486,6 @@ minetest.register_chatcommand("poi_filter", {
 })
 
 -- add button to unified_inventory
-
 if (minetest.get_modpath("unified_inventory")) then
 	unified_inventory.register_button("minetest_poi", {
 		type = "image",
