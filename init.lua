@@ -1,8 +1,16 @@
+namefilter = {}
+
+dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
+
 local poi = {
 
-	points = {}
+	points = {},
+	filter = {}
 
+	
 }
+
+--dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
@@ -19,7 +27,7 @@ function poi.openlist()
 			end -- if type(table)
 			
 	end -- if file
-	
+			
 end -- poi.openlist()
 
 -- Writes the List of POI's
@@ -35,6 +43,22 @@ function poi.save()
 	end -- if file
 	
 end -- poi.save()
+
+-- Helpfunction to Filter all forbidden Names
+function poi.list_filter(name)
+	local list = ""
+	local index = 0
+		
+	for key, value in ipairs(namefilter) do
+		list = list .. key .. ": " .. value .. "\n"
+		index = index + 1
+		
+	end
+	
+	minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player		
+	minetest.chat_send_player(name, core.colorize('#00FF00', index .. " Filter in List.")) -- Send List to Player		
+	
+end
 
 -- List the POI's with an optional Arg
 function poi.list(name, option)
@@ -355,19 +379,23 @@ function poi.check_name(name)
 	if (name == "") or (name == nil) then
 		return false
 		
-	end
+	end -- if name
 	
-	if string.find(name, "/") ~= nil then
-		return false
-	end
+	local valid = true
 	
+	for key, value in ipairs(namefilter) do
+		if string.find(name, value) ~= nil then
+			valid = false
+		end -- if string.find
 		
-	return true
+	end -- for key,value
+
+	return valid -- Name was in Filter?
+	
 end -- poi.check_name()
 
 
 poi.openlist() -- Initalize the List on Start
-
 
 -- The Chatcommands to Register it in MT
 minetest.register_chatcommand("poi_set", {
@@ -464,6 +492,17 @@ minetest.register_chatcommand("poi_validate", {
 	func = function(name)
 
 		poi.validate(name)
+
+	end,
+})
+
+minetest.register_chatcommand("poi_filter", {
+	params = "",
+	description = "Validates the List of PoI's.",
+	privs = {poi = true},
+	func = function(name)
+
+		poi.list_filter(name)
 
 	end,
 })
