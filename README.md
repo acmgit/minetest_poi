@@ -40,6 +40,10 @@ If the List of POI's are in any kind corrupted, you can reload the List without 
 As Admin, you can grant Privs for the Player.
 All the Points will be stored at a File in your World-Directory with the name: poi.txt
 
+### /poi_validate
+Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.<br>
+This Action will be logged.
+
 ## Privileges
 
 interact:<br>
@@ -52,7 +56,8 @@ poi:<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 /poi_move [name]<br>
-
+/poi_rename [name1], [name2]<br>
+/poi_validate
 
 ## Install
 
