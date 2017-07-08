@@ -82,13 +82,7 @@ function poi.set(name, poi_name)
 	return false -- Name exists, leave function
 
    end -- if poi.exist
-
-   if not poi.check_name(poi_name) then
-	minetest.chat_send_player(name, core.colorize('#ff0000', "Invalid Name for PoI."))   
-	return false
 	
-   end -- if poi.check_name
-   
    poi.points[poi_name] = minetest.pos_to_string(currpos) -- Insert the new Entry
    poi.save() -- and write the new List
   
@@ -102,8 +96,8 @@ end -- poi.set()
 -- Deletes a POI
 function poi.delete(name, poi_name)
 	
-   if not poi.check_name(poi_name) then
-      minetest.chat_send_player(name, "Invalid Name of PoI.")
+   if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
+      minetest.chat_send_player(name, "Name of the PoI needed.")
       return false -- can't delete a non-existing Entry, leave function
 
    end
@@ -208,6 +202,7 @@ function poi.move(name, poi_name)
 
    end -- if poi.exist
 
+   local exist = false
    local player = minetest.get_player_by_name(name)
    local currpos = player:getpos(name)
    local oldpos = poi.points[poi_name]
@@ -238,7 +233,7 @@ function poi.rename(name, poi_name)
 	
 	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
 	
-	if not poi.check_name(newname) then
+	if newname == "" then
 		minetest.chat_send_player(name, core.colorize('#ff0000',"Invalid new Pointname.\n"))
 		return false
 	end
@@ -307,40 +302,6 @@ function poi.exist(poi_name)
 
 end -- poi.exist
 
--- Checks the List and deletes invalid Poi's
-function poi.validate(name)
-	local count = 0 -- Value of invalid Entrys
-	local key, value
-	
-	for key, value in pairs(poi.points) do
-		if not poi.check_name(key) then -- is the Name valid?
-			count = count + 1
-			poi.points[key] = nil
-		
-		else
-			if value == nil then -- is the Position of the PoI valid?
-				count = count + 1
-				poi.points[key] = nil
-				
-			end -- if value
-			
-		end -- if check_name
-		
-	end -- for key,value
-	
-	if count > 0 then
-		minetest.log("action","[POI] ".. name .. " has deleted with validate " .. count .. " PoI's.\n")
-		minetest.chat_send_player(name, core.colorize('#ff0000', count .. " invalid PoI's found and deleted.\n"))
-		poi.save()
-		
-	else
-		minetest.chat_send_player(name, core.colorize('#00ff00', "No invalid PoI found.\n"))
-		
-	end
-					
-end -- poi.validate
-		
-
 function poi.count()
 	local count = 0
 	for _,key in pairs(poi.points) do
@@ -355,21 +316,6 @@ function poi.trim(myString)
 	return (string.gsub(myString, "^%s*(.-)%s*$", "%1"))
 
 end -- poi.trim()
-
--- Checks the valid of the name
-function poi.check_name(name)
-	if (name == "") or (name == nil) then
-		return false
-		
-	end
-	
-	if string.find(name, "/") ~= nil then
-		return false
-	end
-	
-		
-	return true
-end -- poi.check_name()
 
 
 poi.openlist() -- Initalize the List on Start
@@ -472,17 +418,6 @@ minetest.register_chatcommand("poi_rename", {
 	func = function(name, poi_name)
 
 		poi.rename(name, poi_name)
-
-	end,
-})
-
-minetest.register_chatcommand("poi_validate", {
-	params = "",
-	description = "Validates the List of PoI's.",
-	privs = {poi = true},
-	func = function(name)
-
-		poi.validate(name)
 
 	end,
 })
