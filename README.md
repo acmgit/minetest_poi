@@ -61,7 +61,7 @@ poi:<br>
 
 ## Install
 
-Maybe you have to rename the folder from "minetest_poi/" to "poi/".
+Move your Download to the Mods-Folder.
 
 ## Depends
 
