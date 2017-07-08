@@ -1,9 +1,17 @@
+namefilter = {}
+
+dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
+
 local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
 local poi = {
 
-	points = {}
+	points = {},
+	filter = {}
 
+	
 }
+
+--dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
@@ -38,9 +46,25 @@ function poi.oldlist(name)
 			end -- if type(table)
 			
 	end -- if file
-	
+			
 end -- poi.openlist()
 
+
+-- Helpfunction to Filter all forbidden Names
+function poi.list_filter(name)
+	local list = ""
+	local index = 0
+		
+	for key, value in ipairs(namefilter) do
+		list = list .. key .. ": " .. value .. "\n"
+		index = index + 1
+		
+	end
+	
+	minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player		
+	minetest.chat_send_player(name, core.colorize('#00FF00', index .. " Filter in List.")) -- Send List to Player		
+	
+end
 
 -- List the POI's with an optional Arg
 function poi.list(name, option)
@@ -290,13 +314,13 @@ function poi.exist(poi_name)
       exist = false
       
    else
-	local Position = poi.points[poi_name]
-	if(Position == nil or Position == "") then
-		exist = false 
+	  local Position = poi.points[poi_name]
+	  if(Position == nil or Position == "") then
+		  exist = false
+      
+	  end -- if Position == nil
 	
-	end -- if Position == nil
-	
-   end -- if poi_name ==
+  end -- if poi_name ==
    
    return exist
 
@@ -317,11 +341,28 @@ function poi.trim(myString)
 
 end -- poi.trim()
 
+-- Checks the valid of the name
+function poi.check_name(name)
+	if (name == "") or (name == nil) then
+		return false
+		
+	end -- if name
+	
+	local valid = true
+	
+	for key, value in ipairs(namefilter) do
+		if string.find(name, value) ~= nil then
+			valid = false
+		end -- if string.find
+		
+	end -- for key,value
+
+	return valid -- Name was in Filter?
+	
+end -- poi.check_name()
 
 poi.openlist() -- Initalize the List on Start
 
-
--- The Chatcommands to Register it in MT
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
 	description = "Set's a Point of Interest.",
@@ -422,8 +463,29 @@ minetest.register_chatcommand("poi_rename", {
 	end,
 })
 
--- add button to unified_inventory
+minetest.register_chatcommand("poi_validate", {
+	params = "",
+	description = "Validates the List of PoI's.",
+	privs = {poi = true},
+	func = function(name)
 
+		poi.validate(name)
+
+	end,
+})
+
+minetest.register_chatcommand("poi_filter", {
+	params = "",
+	description = "Validates the List of PoI's.",
+	privs = {poi = true},
+	func = function(name)
+
+		poi.list_filter(name)
+
+	end,
+})
+
+-- add button to unified_inventory
 if (minetest.get_modpath("unified_inventory")) then
 	unified_inventory.register_button("minetest_poi", {
 		type = "image",
