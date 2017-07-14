@@ -88,20 +88,20 @@ function poi.list(name, option)
 -- Check Options for the Command List
 
 	-- Lists only Filterwords
-	if string.find(option, "-f") ~= nil then
+	if string.find(string.lower(option), "-f") ~= nil then
 		poi.list_filter(name)
 		return true
 
 	end
 
 	-- Lists only the Categories
-	if string.find(option, "-c") ~= nil then
+	if string.find(string.lower(option), "-c") ~= nil then
 		poi.list_categories(name)
 		return true
 	end
 
 	-- List the full Entries of PoI's
-	if string.find(option, "-a") ~= nil then
+	if string.find(string.lower(option), "-a") ~= nil then
 		all = true
 
 	end
@@ -462,7 +462,7 @@ minetest.register_chatcommand("poi_gui", {
 })
 minetest.register_chatcommand("poi_list", {
 	params = "<-a> <-c> <-f>",
-	description = "Shows you all Point's of Interest. -a shows Point's of Interest with Coordinates. -c shows only Categories, -f shows only the Namefilter",
+	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter",
 	privs = {interact = true},
 	func = function(name, arg)
 
