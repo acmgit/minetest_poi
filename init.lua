@@ -516,16 +516,6 @@ minetest.register_chatcommand("poi_validate", {
 	end,
 })
 
-minetest.register_chatcommand("poi_filter", {
-	params = "",
-	description = "Validates the List of PoI's.",
-	privs = {poi = true},
-	func = function(name)
-
-		poi.list_filter(name)
-
-	end,
-})
 
 -- add button to unified_inventory
 if (minetest.get_modpath("unified_inventory")) then
