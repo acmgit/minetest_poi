@@ -4,7 +4,7 @@
 **************************
 --]]
 
-categories = {
+poi_categories = {
    "General",
    "Buildings",
    "Markets",

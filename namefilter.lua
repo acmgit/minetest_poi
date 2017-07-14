@@ -7,7 +7,7 @@ All Filters will be convertet to lowercase
 
 --]]
 
-namefilter = {
+poi_namefilter = {
 	"/", -- Filter to not start Commands
 	"{", -- Filter for Categorie
 	"}", -- Filter for Categorie

@@ -7,8 +7,9 @@ dofile(minetest.get_modpath("minetest_poi") .. "/categories.lua")
 local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
 local poi = {
 
-	points = {}
-
+	points = {},
+	filter = {},
+	categories = {}
 }
 
 
@@ -52,7 +53,7 @@ function poi.list_filter(name)
 	local list = ""
 	local index = 0
 
-	for key, value in pairs(namefilter) do
+	for key, value in pairs(poi_namefilter) do
 		list = list .. key .. ": " .. value .. "\n"
 		index = index + 1
 
@@ -67,7 +68,7 @@ function poi.list_categories(name)
 	local list = ""
 	local index = 0
 
-	for key, value in pairs(categories) do
+	for key, value in pairs(poi_categories) do
 		list = list .. key .. ": " .. value .. "\n"
 		index = index + 1
 
@@ -360,6 +361,39 @@ function poi.exist(poi_name)
 
 end -- poi.exist
 
+-- Checks the List and deletes invalid Poi's
+function poi.validate(name)
+	local count = 0 -- Value of invalid Entrys
+	local key, value
+	
+	for key, value in pairs(poi.points) do
+		if not poi.check_name(key) then -- is the Name valid?
+			count = count + 1
+			poi.points[key] = nil
+		
+		else
+			if value == nil then -- is the Position of the PoI valid?
+				count = count + 1
+				poi.points[key] = nil
+				
+			end -- if value
+			
+		end -- if check_name
+		
+	end -- for key,value
+	
+	if count > 0 then
+		minetest.log("action","[POI] ".. name .. " has deleted with validate " .. count .. " PoI's.\n")
+		minetest.chat_send_player(name, core.colorize('#ff0000', count .. " invalid PoI's found and deleted.\n"))
+		poi.save()
+		
+	else
+		minetest.chat_send_player(name, core.colorize('#00ff00', "No invalid PoI found.\n"))
+		
+	end
+					
+end -- poi.validate
+
 function poi.count()
 	local count = 0
 	for _,key in pairs(poi.points) do
@@ -384,7 +418,7 @@ function poi.check_name(name)
 
 	local valid = true
 
-	for key, value in ipairs(poi.filter) do
+	for key, value in ipairs(poi_namefilter) do
 		if string.find(string.lower(name), string.lower(value)) ~= nil then
 			valid = false
 		end -- if string.find
@@ -402,8 +436,8 @@ end -- poi.check_name()
 --]]
 
 poi.openlist() -- Initalize the List on Start
-poi.filter = namelist
-poi.categories = cat
+poi.filter = poi_namelist
+poi.categories = poi_categories
 
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
