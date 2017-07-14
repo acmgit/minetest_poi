@@ -1,5 +1,5 @@
-namefilter = {}
-categories = {}
+poi_namefilter = {}
+poi_categories = {}
 
 dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
 dofile(minetest.get_modpath("minetest_poi") .. "/categories.lua")
@@ -53,7 +53,7 @@ function poi.list_filter(name)
 	local list = ""
 	local index = 0
 
-	for key, value in pairs(poi_namefilter) do
+	for key, value in pairs(poi.filter) do
 		list = list .. key .. ": " .. value .. "\n"
 		index = index + 1
 
@@ -68,7 +68,7 @@ function poi.list_categories(name)
 	local list = ""
 	local index = 0
 
-	for key, value in pairs(poi_categories) do
+	for key, value in pairs(poi.categories) do
 		list = list .. key .. ": " .. value .. "\n"
 		index = index + 1
 
@@ -418,7 +418,7 @@ function poi.check_name(name)
 
 	local valid = true
 
-	for key, value in ipairs(poi_namefilter) do
+	for key, value in ipairs(poi.filter) do
 		if string.find(string.lower(name), string.lower(value)) ~= nil then
 			valid = false
 		end -- if string.find
@@ -436,7 +436,7 @@ end -- poi.check_name()
 --]]
 
 poi.openlist() -- Initalize the List on Start
-poi.filter = poi_namelist
+poi.filter = poi_namefilter
 poi.categories = poi_categories
 
 minetest.register_chatcommand("poi_set", {
