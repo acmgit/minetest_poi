@@ -176,8 +176,20 @@ function poi.set(name, poi_name)
 	p_name, categorie = poi.split_option(poi_name)
 	
 	if poi.exist(p_name) then -- Ups, Name exists
-		poi.print(name, "PoI <" .. p_name .. "> exists.", red)
-		return false -- Name exists, leave function
+		if(poi.get_categorie(p_name) ~= categorie) then -- ok, we want to change the Categorie
+			local value = poi.points[p_name]
+			local pos, cat
+			pos, cat = poi.split_pos_cat(poi.points[p_name])
+			poi.points[p_name] = pos .. "{" .. tonumber(categorie) .. "}" -- Changes the Entry
+			poi.print(name, name .. " has changed the POI: " .. p_name .. " at " .. pos .. " Categorie: " .. poi.get_categoriename(cat) .. " to Categorie: " .. poi.get_categoriename(categorie) .. "\n", log)
+			poi.print(name, "POI: " .. p_name .. " at " .. pos .." in Categorie: " .. poi.get_categoriename(cat) .." changed to Categorie: " .. poi.get_categoriename(categorie), green)
+			poi.save()
+			return true
+			
+		else
+			poi.print(name, "PoI <" .. p_name .. "> exists.", red)
+			return false -- Name exists, leave function
+		end -- if(poi.get_categorie)
 
 	end -- if poi.exist
 
@@ -190,8 +202,8 @@ function poi.set(name, poi_name)
 	poi.points[p_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(categorie) .. "}"-- Insert the new Entry
 	poi.save() -- and write the new List
 
-	poi.print(name, name .. " has set the POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .. " Categorie: {" .. categorie .. "}\n", log)
-	poi.print(name, "POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .." in Categorie: " .. categorie .." stored.", green)
+	poi.print(name, name .. " has set the POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .. " Categorie: {" .. poi.get_categoriename(categorie) .. "}\n", log)
+	poi.print(name, "POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .." in Categorie: " .. poi.get_categoriename(categorie) .." stored.", green)
 	return true
 
 end -- poi.set()
@@ -385,7 +397,8 @@ end -- poi.exist
 
 -- Checks the List and deletes invalid Poi's
 function poi.validate(name)
-	local count = 0 -- Value of invalid Entrys
+	local count = 0 -- Value of invalid Entries
+	local nocat = 0 -- Value of Entries without Categorie
 	local key, value
 	
 	for key, value in pairs(poi.points) do
@@ -397,6 +410,14 @@ function poi.validate(name)
 			if value == nil then -- is the Position of the PoI valid?
 				count = count + 1
 				poi.points[key] = nil
+			
+			else -- Yeahh, valid Entry, let us see the Categorie ...
+			
+				if( not (string.find(poi.points[key], "{")) and not (string.find(poi.points[key], "}"))) then
+					-- Entry without Categorie found
+					nocat = nocat + 1
+					poi.points[key] = value .. "{1}" -- Set Categorie to 1
+				end -- if(string.find)
 				
 			end -- if value
 			
@@ -404,9 +425,11 @@ function poi.validate(name)
 		
 	end -- for key,value
 	
-	if count > 0 then
+	if (count > 0) or (nocat > 0) then
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
-		poi.print(name, count .. " invalid PoI's found and deleted.\n", red)
+		poi.print(name, name .. " has set Categories with validate " .. nocat .. " PoI's.\n", log)
+		poi.print(name, count .. " invalid PoI's found and deleted.", red)
+		poi.print(name, nocat .. " PoI's without Categorie found and set to 1.", red)
 		poi.save()
 		
 	else
@@ -570,6 +593,17 @@ function poi.get_categoriename(cat)
 	return categorie
 
 end -- get_categoriename()
+
+-- Gets a Categorie of an Entry
+function poi.get_categorie(poi_name)
+	local value, cat, pos
+	
+	value = poi.points[poi_name]
+	pos, cat = poi.split_pos_cat(value)
+	
+	return cat
+
+end -- get_categorie()
 
 --[[
 	********************************************

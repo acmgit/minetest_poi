@@ -7,11 +7,12 @@ A Mod for Minetest.
 This Mod adds PoI's, Point's of Interest to your World.
 If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
 
-### /poi_list [-a]  [-f]  [-c]
+### /poi_list [-a]  [-f]  [-c]  [-i <Number>]
 Lists Points of Interest.<br>
 Option -a: List all Points of Interest with Coordinates<br>
 Option -f: Lists forbidden Chars or Names<br>
 Option -c: Lists the Categories of PoI's<br>
+Option -i <Number>: Lists all Entrys of the given Categorienumber<br>
 
 ### /poi_jump [Name]
 Jumps to a Point of Interest.
@@ -20,8 +21,10 @@ Jumps to a Point of Interest.
 Opens a simple GUI, where you can Double-Click the Points to Jump.
 
 ### This commands demands the Priv "poi":
-### /poi_set [Name]
+### /poi_set [Name][, Categorienumber]
 Set's a new Point of Interest. You can't overwrite an existing POI.<br>
+If you don't set a Categorienumber, it will given 1 by default.<br>
+You can change the Categorie of an Point, if you set the Point with a different Categorienumber<br>
 This Action will be logged.
 
 ### /poi_delete [Name]
@@ -44,17 +47,18 @@ All the Points will be stored at a File in your World-Directory with the name: p
 
 ### /poi_validate
 Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.<br>
+This Function checks the Entries for a Categorienumber, if there is no, it sets to 1 per default.<br>
 This Action will be logged.
 
 ## Privileges
 
 interact:<br>
 /poi_jump [name]<br>
-/poi_list [-a]  [-f]  [-c]<br>
+/poi_list [-a]  [-f]  [-c]  [-i <Categorienumber>]<br>
 /poi_gui<br>
 
 poi:<br>
-/poi_set [name]<br>
+/poi_set [name][, Categorienumber]<br>
 /poi_delete [name]<br>
 /poi_reload<br>
 /poi_move [name]<br>
