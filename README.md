@@ -8,10 +8,10 @@ This Mod adds PoI's, Point's of Interest to your World.
 If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
 
 ### /poi_list [-a]  [-f]  [-c]
-Lists Points of Interest.
-Option -a: List all Points of Interest with Coordinates
-Option -f: Lists forbidden Chars or Names
-Option -c: Lists the Categories of PoI's
+Lists Points of Interest.<br>
+Option -a: List all Points of Interest with Coordinates<br>
+Option -f: Lists forbidden Chars or Names<br>
+Option -c: Lists the Categories of PoI's<br>
 
 ### /poi_jump [Name]
 Jumps to a Point of Interest.
