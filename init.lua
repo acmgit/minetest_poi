@@ -96,8 +96,10 @@ end -- poi.list_categories()
 function poi.list(name, option)
 
 	local list = ""
-	local all = false -- is option list all set?
-
+	local all = false 	-- is option list all set?
+	local pos, cat
+	local idx = 0	-- a given Index with the option -i <number>
+	
 -- Check Options for the Command List
 
 	-- Lists only Filterwords
@@ -119,16 +121,43 @@ function poi.list(name, option)
 
 	end
 
-	poi.print(name, poi.count() .. " Point's of Interest are:", none)
-
+	if string.find(string.lower(option), "-i") ~= nil then
+		idx = tonumber(string.sub(string.lower(option), string.find(string.lower(option), "-i") + 2, -1))
+		idx = idx or 0 -- Convert a invalid Number to 0
+	end
+	
+	if (idx > 0) then
+		poi.print(name, "Point's of Interest in Categorie " .. poi.get_categoriename(idx) .. " are:", green)
+	
+	else
+		poi.print(name, poi.count() .. " Point's of Interest are:", green)
+	
+	end -- if(idx > 0)
+	
 	for key, value in poi.spairs(poi.points) do	-- Build up the List
-		if all then
-			list = list .. key .. ": " .. value .. "\n"
+		pos, cat = poi.split_pos_cat(value)
+		if(idx > 0) then
+			if(cat == idx) then
+				if all then
+					list = list .. key .. ": " .. pos .. "\n"
 
-		else
-			list = list .. key .. "\n"
+				else
+					list = list .. key .. "\n"
 
-		end -- if all
+				end -- if all
+				
+			end -- if (key == idx)
+			
+		else -- if(idx > 0)
+			if all then
+				list = list .. key .. ": " .. pos .. " Categorie: " .. poi.get_categoriename(cat) .. "\n"
+				
+			else
+				list = list .. key .. "\n"
+				
+			end -- if(all)
+			
+		end -- if(key == idx)
 
 	end -- for key,value
 
@@ -142,24 +171,27 @@ function poi.set(name, poi_name)
 
 	local player = minetest.get_player_by_name(name)
 	local currpos = player:getpos(name)
-
-	if poi.exist(poi_name) then -- Ups, Name exists
-		poi.print(name, "PoI <" .. poi_name .. "> exists.", red)
+	local categorie, p_name
+	
+	p_name, categorie = poi.split_option(poi_name)
+	
+	if poi.exist(p_name) then -- Ups, Name exists
+		poi.print(name, "PoI <" .. p_name .. "> exists.", red)
 		return false -- Name exists, leave function
 
 	end -- if poi.exist
 
-	if not poi.check_name(poi_name) then
-		poi.print(name, "Invalid Name <" .. poi_name .. "> for PoI.", red)
+	if not poi.check_name(p_name) then
+		poi.print(name, "Invalid Name <" .. p_name .. "> for PoI.", red)
 		return false
 
 	end -- if poi.check_name
 
-	poi.points[poi_name] = minetest.pos_to_string(currpos) -- Insert the new Entry
+	poi.points[p_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(categorie) .. "}"-- Insert the new Entry
 	poi.save() -- and write the new List
 
-	poi.print(name, name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n", log)
-	poi.print(name, "POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.", green)
+	poi.print(name, name .. " has set the POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .. " Categorie: {" .. categorie .. "}\n", log)
+	poi.print(name, "POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .." in Categorie: " .. categorie .." stored.", green)
 	return true
 
 end -- poi.set()
@@ -213,6 +245,8 @@ function poi.jump(name, poi_name)
 	end -- if poi.exist
 
 	local Position = poi.points[poi_name]
+	Position = poi.split_pos_cat(Position)		-- Extract the Position
+	
 	local player = minetest.get_player_by_name(name)
 
 	player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
@@ -278,8 +312,9 @@ function poi.move(name, poi_name)
 	local player = minetest.get_player_by_name(name)
 	local currpos = player:getpos(name)
 	local oldpos = poi.points[poi_name]
-
-	poi.points[poi_name] = minetest.pos_to_string(currpos) -- Write the Position new
+	local cat = poi.split_pos_cat(oldpos)
+	
+	poi.points[poi_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(cat) .. "}" -- Write the Position new
 	poi.save() -- and write the List
 
 	poi.print(name, name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n", log)
@@ -476,6 +511,65 @@ function poi.print(name, message, color)
 	end -- if(error == log)
 	
 end -- print_message()
+
+-- Returns the Entryname and the Categorieindex from an given Option
+function poi.split_option(poi_name)
+	local categorie, p_name
+	
+	categorie = 1	-- Set's categorie to 1 per default
+	
+	if(string.find(poi_name, ",") ~= nil) then
+		p_name = poi.trim(string.sub(poi_name,1, string.find(poi_name, ",")-1))					-- Extract only the Name
+		categorie = tonumber(poi.trim(string.sub(poi_name,string.find(poi_name, ",")+1,-1)))		-- Extract the Number of Categorie		
+
+	else
+		p_name = poi_name	-- No Categorie found, only a Name was given
+
+	end
+	
+	return p_name, categorie
+
+end -- poi.split_option()
+
+-- Returns Coordinates and Categorieindex from an Entry
+function poi.split_pos_cat(position)
+	local pos, cat
+	
+	if( (string.find(position,"{")) and (string.find(position, "}"))) then
+		pos = string.sub(position, 1, string.find(position, "{") - 1) -- Extract the Coords
+		cat = tonumber(string.sub(position, string.find(position, "{") + 1, string.find(position, "}") - 1)) -- Extract the Categorie
+		cat = cat or 1 -- Convert it in an invalid case to 1
+		
+	else
+	
+		-- No Categorie found
+		pos = position
+		cat = 1			-- Categorie general
+	
+	end -- if(string.find(position)
+	
+	return pos, cat
+
+end -- poi.split_pos_cat()
+
+
+-- Get's a Categoriename by Index
+function poi.get_categoriename(cat)
+
+	local categorie = "Unknown"
+	
+	for key, value in pairs(poi.categories) do
+		if(key == cat) then
+			categorie = value
+			break
+			
+		end -- if(key == cat)
+		
+	end -- for key,value
+
+	return categorie
+
+end -- get_categoriename()
 
 --[[
 	********************************************
