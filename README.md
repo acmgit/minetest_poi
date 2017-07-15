@@ -7,9 +7,11 @@ A Mod for Minetest.
 This Mod adds PoI's, Point's of Interest to your World.
 If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
 
-### /poi_list [-a]
-Lists all Points of Interest.
-With the option -a, you can see the Coords of the Points too.
+### /poi_list [-a]  [-f]  [-c]
+Lists Points of Interest.
+Option -a: List all Points of Interest with Coordinates
+Option -f: Lists forbidden Chars or Names
+Option -c: Lists the Categories of PoI's
 
 ### /poi_jump [Name]
 Jumps to a Point of Interest.
@@ -48,7 +50,7 @@ This Action will be logged.
 
 interact:<br>
 /poi_jump [name]<br>
-/poi_list [-a]<br>
+/poi_list [-a]  [-f]  [-c]<br>
 /poi_gui<br>
 
 poi:<br>
