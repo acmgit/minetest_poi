@@ -612,8 +612,8 @@ end -- get_categorie()
 --]]
 
 minetest.register_chatcommand("poi_set", {
-	params = "<poi_name>",
-	description = "Set's a Point of Interest.",
+	params = "<poi_name, categorie>",
+	description = "Set's a Point of Interest or changes the Categorie of an existing Point.",
 	privs = {poi = true},
 	func = function(name, poi_name)
 
@@ -633,8 +633,8 @@ minetest.register_chatcommand("poi_gui", {
 	end,
 })
 minetest.register_chatcommand("poi_list", {
-	params = "<-a> <-c> <-f>",
-	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter",
+	params = "<-a> <-c> <-f> <-i Number>",
+	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Number> shows only the Entries of the given Categorienumber",
 	privs = {interact = true},
 	func = function(name, arg)
 
