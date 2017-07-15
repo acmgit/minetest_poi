@@ -24,7 +24,7 @@ Opens a simple GUI, where you can Double-Click the Points to Jump.
 ### /poi_set [Name][, Categorienumber]
 Set's a new Point of Interest. You can't overwrite an existing POI.<br>
 If you don't set a Categorienumber, it will given 1 by default.<br>
-You can change the Categorie of an Point, if you set the Point with a different Categorienumber<br>
+You can change the Categorie of an Point, if you set the Point with a different Categorienumber.<br>
 This Action will be logged.
 
 ### /poi_delete [Name]
@@ -43,7 +43,6 @@ This Action will be logged.
 If the List of POI's are in any kind corrupted, you can reload the List without a new Serverstart.
 
 As Admin, you can grant Privs for the Player.
-All the Points will be stored at a File in your World-Directory with the name: poi.txt
 
 ### /poi_validate
 Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.<br>
