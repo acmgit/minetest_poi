@@ -12,15 +12,27 @@ local poi = {
 	categories = {}
 }
 
+-- Options for Print_Message
+local log = 0
+local green = '#00FF00'
+local red = '#FF0000'
+local orange = '#FF6700'
+local none = 99
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
 
+--[[
+	********************************************
+	***           Functions of POI                    ***
+	********************************************
+--]]
+
 -- Loads the List of POI's
 function poi.openlist()
 
-  local load = storage:to_table()
-  poi.points = load.fields
+	local load = storage:to_table()
+	poi.points = load.fields
 
 end -- poi.openlist()
 
@@ -29,6 +41,7 @@ end -- poi.openlist()
 function poi.save()
 
 	storage:from_table({fields=poi.points})
+	
 end -- poi.save()
 
 -- Loads the List of POI's  Read PoIs from the old file  --  Can be disabled in the future only for backward compatibility
@@ -40,7 +53,7 @@ function poi.oldlist(name)
 			if type(table) == "table" then
 				poi.points = nil
 				poi.points = table.points
-				minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
+				poi.print(name, "POI-List reloaded.", green)
 
 			end -- if type(table)
 
@@ -58,10 +71,10 @@ function poi.list_filter(name)
 		index = index + 1
 
 	end -- for key, value
-
-	minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player
-	minetest.chat_send_player(name, core.colorize('#00FF00', index .. " Filter in List.")) -- Send List to Player
-
+	
+	poi.print(name, list, orange)
+	poi.print(name, index .. " Filter in List.", green)
+	
 end -- poi.list_filter()
 
 function poi.list_categories(name)
@@ -74,16 +87,16 @@ function poi.list_categories(name)
 
 	end -- for key,value
 
-	minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player
-	minetest.chat_send_player(name, core.colorize('#00FF00', index .. " Categories in List.")) -- Send List to Player
+	poi.print(name, list, orange) -- Send List to Player
+	poi.print(name, index .. " Categories in List.", green) -- Send List to Player
 
 end -- poi.list_categories()
 
 -- List the POI's with an optional Arg
 function poi.list(name, option)
 
-   local list = ""
-   local all = false -- is option list all set?
+	local list = ""
+	local all = false -- is option list all set?
 
 -- Check Options for the Command List
 
@@ -106,105 +119,105 @@ function poi.list(name, option)
 
 	end
 
-   minetest.chat_send_player(name, poi.count() .. " Point's of Interest are:")
+	poi.print(name, poi.count() .. " Point's of Interest are:", none)
 
-   for key, value in poi.spairs(poi.points) do	-- Build up the List
-      if all then
-         list = list .. key .. ": " .. value .. "\n"
+	for key, value in poi.spairs(poi.points) do	-- Build up the List
+		if all then
+			list = list .. key .. ": " .. value .. "\n"
 
-      else
-         list = list .. key .. "\n"
+		else
+			list = list .. key .. "\n"
 
-      end -- if all
+		end -- if all
 
-   end -- for key,value
+	end -- for key,value
 
-   minetest.chat_send_player(name, core.colorize('#FF6700',list)) -- Send List to Player
-   return true
+	poi.print(name, list, orange) -- Send List to Player
+	return true
 
 end -- poi.list()
 
 -- Set's a POI
 function poi.set(name, poi_name)
 
-   local player = minetest.get_player_by_name(name)
-   local currpos = player:getpos(name)
+	local player = minetest.get_player_by_name(name)
+	local currpos = player:getpos(name)
 
-   if poi.exist(poi_name) then -- Ups, Name exists
-	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> exists."))
-	return false -- Name exists, leave function
+	if poi.exist(poi_name) then -- Ups, Name exists
+		poi.print(name, "PoI <" .. poi_name .. "> exists.", red)
+		return false -- Name exists, leave function
 
-   end -- if poi.exist
+	end -- if poi.exist
 
-   if not poi.check_name(poi_name) then
-	minetest.chat_send_player(name, core.colorize('#ff0000', "Invalid Name <" .. poi_name .. "> for PoI."))
-	return false
+	if not poi.check_name(poi_name) then
+		poi.print(name, "Invalid Name <" .. poi_name .. "> for PoI.", red)
+		return false
 
-   end -- if poi.check_name
+	end -- if poi.check_name
 
-   poi.points[poi_name] = minetest.pos_to_string(currpos) -- Insert the new Entry
-   poi.save() -- and write the new List
+	poi.points[poi_name] = minetest.pos_to_string(currpos) -- Insert the new Entry
+	poi.save() -- and write the new List
 
-
-   minetest.log("action","[POI] "..name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n")
-   minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored."))
-   return true
+	poi.print(name, name .. " has set the POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .. "\n", log)
+	poi.print(name, "POI: " .. poi_name .. " at " .. minetest.pos_to_string(currpos) .." stored.", green)
+	return true
 
 end -- poi.set()
 
 -- Deletes a POI
 function poi.delete(name, poi_name)
 
-   if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
-      minetest.chat_send_player(name, "Name of the PoI needed.")
-      return false -- can't delete a non-existing Entry, leave function
+	if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
+	
+		poi.print(name, "Name of the PoI needed.", red)
+		return false -- can't delete a non-existing Entry, leave function
 
-   end
+	end
 
-   if poi.exist(poi_name) == false then
-	minetest.chat_send_player(name, core.colorize('#ff0000', "PoI <" .. poi_name .. "> unknown to delete."))
-	return false -- can't delete a non-existing Entry, leave function
+	if poi.exist(poi_name) == false then
+		poi.print(name,  "PoI <" .. poi_name .. "> unknown to delete.", red)
+		return false -- can't delete a non-existing Entry, leave function
 
-   end -- if poi.exist
+	end -- if poi.exist
 
-   local list = ""
+	local list = ""
 
-   list = poi_name .. ": " .. poi.points[poi_name]	-- Get the full Name of the PoI and save it in a temporary var
-   poi.points[poi_name] = nil -- and delete it
+	list = poi_name .. ": " .. poi.points[poi_name]	-- Get the full Name of the PoI and save it in a temporary var
+	poi.points[poi_name] = nil -- and delete it
 
-   minetest.log("action","[POI] "..name .. " has deleted POI-Name: " .. list .. "\n")
-   minetest.chat_send_player(name, core.colorize('#ff0000',list .. " deleted."))
-   poi.save()	-- Write the new list at the server
+	poi.print(name, name .. " has deleted POI-Name: " .. list .. "\n", log)
+	poi.print(name, list .. " deleted.", red)
+	poi.save()	-- Write the new list at the server
 
-   return true
+	return true
 
 end -- poi.delete()
 
 -- Reload or Reset the List of PoI's and load it new
 function poi.reload(name)
-   poi.points = nil -- Deletes the List of PoI's
-   poi.openlist() -- and Load it new
+	poi.points = nil -- Deletes the List of PoI's
+	poi.openlist() -- and Load it new
 
-   minetest.chat_send_player(name, core.colorize('#ff0000', "POI-List reloaded."))
-   return true
+	poi.print(name, "POI-List reloaded.", red)
+	return true
 
 end -- poi.reload()
 
 -- Jumps to PoI
 function poi.jump(name, poi_name)
 
-   if (poi.exist(poi_name) == false) then -- Unknown or not existing Point of Interest
-      minetest.chat_send_player(name, core.colorize('#ff0000', "Unknown Point of Interest: " .. poi_name .. "."))
-      return false -- POI not in List, leave function
+	if (poi.exist(poi_name) == false) then -- Unknown or not existing Point of Interest
+		poi.print(name, "Unknown Point of Interest: " .. poi_name .. ".", red)
+		return false -- POI not in List, leave function
 
-   end -- if poi.exist
+	end -- if poi.exist
 
-   local Position = poi.points[poi_name]
-   local player = minetest.get_player_by_name(name)
+	local Position = poi.points[poi_name]
+	local player = minetest.get_player_by_name(name)
 
-   player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
-   minetest.chat_send_player(name, core.colorize('#00ff00',"You are moved to POI: " .. poi_name .. "."))
-   return true
+	player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
+	poi.print(name, "You are moved to POI: " .. poi_name .. ".", green)
+	return true
 
 end -- poi.jump()
 
@@ -255,50 +268,51 @@ end)
 -- Changes a POI-Position
 function poi.move(name, poi_name)
 
-   if (poi.exist(poi_name) == false) then
-	minetest.chat_send_player(name, core.colorize('#ff0000', "Unknown PoI <" .. poi_name .. ">."))
-	return false
+	if (poi.exist(poi_name) == false) then
+		poi.print(name, "Unknown PoI <" .. poi_name .. ">.", red)
+		return false
 
-   end -- if poi.exist
+	end -- if poi.exist
 
-   local exist = false
-   local player = minetest.get_player_by_name(name)
-   local currpos = player:getpos(name)
-   local oldpos = poi.points[poi_name]
+	local exist = false
+	local player = minetest.get_player_by_name(name)
+	local currpos = player:getpos(name)
+	local oldpos = poi.points[poi_name]
 
-   poi.points[poi_name] = minetest.pos_to_string(currpos) -- Write the Position new
-   poi.save() -- and write the List
+	poi.points[poi_name] = minetest.pos_to_string(currpos) -- Write the Position new
+	poi.save() -- and write the List
 
-   minetest.log("action","[POI] "..name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n")
-   minetest.chat_send_player(name, core.colorize('#00ff00',"POI: " .. poi_name .. " at " .. oldpos .." moved to Position: " .. minetest.pos_to_string(currpos) .."\n"))
-   return true
+	poi.print(name, name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n", log)
+	poi.print(name, "POI: " .. poi_name .. " at " .. oldpos .." moved to Position: " .. minetest.pos_to_string(currpos) .."\n", green)
+	return true
 
 end -- poi.move
 
+-- Renames a POI
 function poi.rename(name, poi_name)
 	local oldname, newname
 
 	if string.find(poi_name, ",") == nil then
-		minetest.chat_send_player(name, core.colorize('#ff0000',"/poi_rename: No new Name for Point given.\n"))
+		poi.print(name, "/poi_rename: No new Name for Point given.\n", red)
 		return false
 	end
 
 	oldname = poi.trim(string.sub(poi_name,1, string.find(poi_name, ",")-1))
 
 	if not poi.exist(oldname) then
-		minetest.chat_send_player(name, core.colorize('#ff0000',"Point to rename not found.\n"))
+		poi.print(name, "Point to rename not found.\n", red)
 		return false
 	end
 
 	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
 
-	if not poi.checkname(poi_name) then
-		minetest.chat_send_player(name, core.colorize('#ff0000',"Invalid new Pointname.\n"))
+	if not poi.check_name(newname) then
+		poi.print(name, "Invalid new Pointname.\n", red)
 		return false
 	end
 
 	if poi.exist(newname) then
-		minetest.chat_send_player(name, core.colorize('#ff0000',"New Pointname already exists.\n"))
+		poi.print(name, "New Pointname already exists.\n", red)
 		return false
 	end
 
@@ -308,38 +322,11 @@ function poi.rename(name, poi_name)
 
 	poi.points[oldname] = nil -- now deletes the old one
 	poi.save()			-- saves the List
-
-	minetest.log("action","[POI] "..name .. " has renamed POI-Name: " .. oldname .. " to: " .. newname .. " - Position: " .. old_position .. "\n")
-	minetest.chat_send_player(name, core.colorize('#00ff00',"PoI-Name: " .. oldname .. " renamed to " .. newname .. " - Position: " .. old_position .. "\n"))
+	
+	poi.print(name, name .. " has renamed POI-Name: " .. oldname .. " to: " .. newname .. " - Position: " .. old_position .. "\n", log)
+	poi.print(name, "PoI-Name: " .. oldname .. " renamed to " .. newname .. " - Position: " .. old_position .. "\n", green)
 
 end -- poi.rename()
-
-function poi.spairs(t, order)
-    -- collect the keys
-    local keys = {}
-    for k in pairs(t) do
-	keys[#keys+1] = k
-    end -- for k
-
-    -- if order function given, sort by it by passing the table and keys a, b,
-    -- otherwise just sort the keys
-    if order then
-        table.sort(keys, function(a,b) return order(t, a, b) end)
-    else
-        table.sort(keys)
-    end -- if order
-
-    -- return the iterator function
-    local i = 0
-    return function()
-        i = i + 1
-        if keys[i] then
-            return keys[i], t[keys[i]]
-        end -- if keys
-
-    end -- function()
-
-end -- poi.spairs
 
 -- Check the PoI in the List? Return true if the Name exsists, else false
 function poi.exist(poi_name)
@@ -383,27 +370,24 @@ function poi.validate(name)
 	end -- for key,value
 	
 	if count > 0 then
-		minetest.log("action","[POI] ".. name .. " has deleted with validate " .. count .. " PoI's.\n")
-		minetest.chat_send_player(name, core.colorize('#ff0000', count .. " invalid PoI's found and deleted.\n"))
+		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
+		poi.print(name, count .. " invalid PoI's found and deleted.\n", red)
 		poi.save()
 		
 	else
-		minetest.chat_send_player(name, core.colorize('#00ff00', "No invalid PoI found.\n"))
+		poi.print(name, "No invalid PoI found.\n", green)
 		
 	end
 					
 end -- poi.validate
 
-function poi.count()
-	local count = 0
-	for _,key in pairs(poi.points) do
-		count = count + 1
+--[[
+	********************************************
+	***           Helpfunctions                        ***
+	********************************************
+--]]
 
-	end -- for _,key
-
-	return count
-end -- poi.count
-
+-- Trims a String
 function poi.trim(myString)
 	return (string.gsub(myString, "^%s*(.-)%s*$", "%1"))
 
@@ -429,15 +413,75 @@ function poi.check_name(name)
 
 end -- poi.check_name()
 
+-- Count's the amount of Entries
+function poi.count()
+	local count = 0
+	for _,key in pairs(poi.points) do
+		count = count + 1
+
+	end -- for _,key
+
+	return count
+end -- poi.count
+
+-- Returns a sorted Table
+function poi.spairs(t, order)
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do
+	keys[#keys+1] = k
+    end -- for k
+
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end -- if order
+
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end -- if keys
+
+    end -- function()
+
+end -- poi.spairs
+
+-- Writes a Message in a specific color or Logs it
+function poi.print(name, message, color)
+
+	error = error or none	-- No Error given, set it to 99 (none)
+	
+	-- Logs a Message
+	if(color == log) then
+		minetest.log("action","[POI] "..name .. " : " .. message)
+		return
+	
+	else
+		if(color ~= none) then
+			minetest.chat_send_player(name, core.colorize(color, message))
+			return
+		
+		else 
+			minetest.chat_send_player(name,  message)
+			return
+		
+		end -- if(error ~=none)
+		
+	end -- if(error == log)
+	
+end -- print_message()
+
 --[[
 	********************************************
-	***           Start of the Mod           ***
+	***         Commands to Register             ***
 	********************************************
 --]]
-
-poi.openlist() -- Initalize the List on Start
-poi.filter = poi_namefilter
-poi.categories = poi_categories
 
 minetest.register_chatcommand("poi_set", {
 	params = "<poi_name>",
@@ -564,3 +608,13 @@ if (minetest.get_modpath("unified_inventory")) then
 		end,
 	})
 end
+
+--[[
+	********************************************
+	***           Start of the Mod                     ***
+	********************************************
+--]]
+
+poi.openlist() -- Initalize the List on Start
+poi.filter = poi_namefilter
+poi.categories = poi_categories
