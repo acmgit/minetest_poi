@@ -21,19 +21,19 @@ Opens a simple GUI, where you can Double-Click the Points to Jump.
 
 ### This commands demands the Priv "poi":
 ### /poi_set [Name]
-Set's a new Point of Interest. You can't overwrite an existing POI.
+Set's a new Point of Interest. You can't overwrite an existing POI.<br>
 This Action will be logged.
 
 ### /poi_delete [Name]
-Deletes a Point of Interest. You can't delete an unknown POI.
+Deletes a Point of Interest. You can't delete an unknown POI.<br>
 This Action will be logged.
 
 ### /poi_move [Name]
-This command overwrites the Coordinates of the given POI with your current Coordinates.
+This command overwrites the Coordinates of the given POI with your current Coordinates.<br>
 This Action will be logged.
 
 ### /poi_rename [Name1],[Name2]
-This command renames an existing Point [Name1] of Interest to Point of Interest [Name2]. [Name2] can't have the name of an already existing Point. 
+This command renames an existing Point [Name1] of Interest to Point of Interest [Name2]. [Name2] can't have the name of an already existing Point.<br>
 This Action will be logged.
 
 ### /poi_reload
