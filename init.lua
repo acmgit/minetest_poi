@@ -422,11 +422,7 @@ function poi.validate(name)
 				
 				local pos, cat
 				pos, cat = poi.split_pos_cat(poi.points[key])
-<<<<<<< HEAD
 				if( (cat == nil) or (cat > poi.max_categories) or (cat <= 0) )then	-- Invalid Categorienumber found
-=======
-				if( (cat == nil) or (cat > poi.max_categories) or (cat <= 0) then	-- Invalid Categorienumber found
->>>>>>> 2c90a366c9d05534223c0da3304b6d948caddabb
 					poi.points[key] = pos .. "{1}" -- Changes the Categorienumber to 1
 					invalid_cat = invalid_cat + 1
 					
@@ -438,7 +434,7 @@ function poi.validate(name)
 		
 	end -- for key,value
 	
-	if (count > 0) or (nocat > 0) then
+	if (count > 0) or (invalid_cat > 0) then
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
 		poi.print(name, name .. " has found " .. invalid_cat .. " Entries with an invalid Categorie.\n", log)
 		poi.print(name, count .. " invalid PoI's found and deleted.", red)
