@@ -422,7 +422,11 @@ function poi.validate(name)
 				
 				local pos, cat
 				pos, cat = poi.split_pos_cat(poi.points[key])
+<<<<<<< HEAD
 				if( (cat == nil) or (cat > poi.max_categories) or (cat <= 0) )then	-- Invalid Categorienumber found
+=======
+				if( (cat == nil) or (cat > poi.max_categories) or (cat <= 0) then	-- Invalid Categorienumber found
+>>>>>>> 2c90a366c9d05534223c0da3304b6d948caddabb
 					poi.points[key] = pos .. "{1}" -- Changes the Categorienumber to 1
 					invalid_cat = invalid_cat + 1
 					
