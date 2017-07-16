@@ -9,7 +9,8 @@ local poi = {
 
 	points = {},
 	filter = {},
-	categories = {}
+	categories = {},
+	max_categories
 }
 
 -- Options for Print_Message
@@ -398,7 +399,7 @@ end -- poi.exist
 -- Checks the List and deletes invalid Poi's
 function poi.validate(name)
 	local count = 0 -- Value of invalid Entries
-	local nocat = 0 -- Value of Entries without Categorie
+	local invalid_cat = 0 -- Value of Entries without Categorie
 	local key, value
 	
 	for key, value in pairs(poi.points) do
@@ -415,9 +416,17 @@ function poi.validate(name)
 			
 				if( not (string.find(poi.points[key], "{")) and not (string.find(poi.points[key], "}"))) then
 					-- Entry without Categorie found
-					nocat = nocat + 1
+					invalid_cat = invalid_cat + 1
 					poi.points[key] = value .. "{1}" -- Set Categorie to 1
 				end -- if(string.find)
+				
+				local pos, cat
+				pos, cat = poi.split_pos_cat(poi.points[key])
+				if( (cat == nil) or (cat > poi.max_categories) or (cat <= 0) )then	-- Invalid Categorienumber found
+					poi.points[key] = pos .. "{1}" -- Changes the Categorienumber to 1
+					invalid_cat = invalid_cat + 1
+					
+				end -- if(cat ==)
 				
 			end -- if value
 			
@@ -427,9 +436,9 @@ function poi.validate(name)
 	
 	if (count > 0) or (nocat > 0) then
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
-		poi.print(name, name .. " has set Categories with validate " .. nocat .. " PoI's.\n", log)
+		poi.print(name, name .. " has found " .. invalid_cat .. " Entries with an invalid Categorie.\n", log)
 		poi.print(name, count .. " invalid PoI's found and deleted.", red)
-		poi.print(name, nocat .. " PoI's without Categorie found and set to 1.", red)
+		poi.print(name, invalid .. " PoI's with an invalid Categorie found and set to 1.", red)
 		poi.save()
 		
 	else
@@ -605,6 +614,18 @@ function poi.get_categorie(poi_name)
 
 end -- get_categorie()
 
+function poi.count_categories()
+	local cat = 0
+	
+	for key,value in pairs(poi.categories) do
+		cat = cat + 1
+		
+	end -- for key,value
+	
+	return cat
+
+end -- count_categories()
+	
 --[[
 	********************************************
 	***         Commands to Register             ***
@@ -746,3 +767,5 @@ end
 poi.openlist() -- Initalize the List on Start
 poi.filter = poi_namefilter
 poi.categories = poi_categories
+poi.max_categories = poi.count_categories()
+
