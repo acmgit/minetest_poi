@@ -438,7 +438,7 @@ function poi.validate(name)
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
 		poi.print(name, name .. " has found " .. invalid_cat .. " Entries with an invalid Categorie.\n", log)
 		poi.print(name, count .. " invalid PoI's found and deleted.", red)
-		poi.print(name, invalid .. " PoI's with an invalid Categorie found and set to 1.", red)
+		poi.print(name, invalid_cat .. " PoI's with an invalid Categorie found and set to 1.", red)
 		poi.save()
 		
 	else
