@@ -124,6 +124,11 @@ function poi.list(name, option)
 
 	if string.find(string.lower(option), "-i") ~= nil then
 		idx = tonumber(string.sub(string.lower(option), string.find(string.lower(option), "-i") + 2, -1))
+		if(idx == nil) then -- Option wan't a Number, then try to find out the Categorie by Name
+			idx = poi.get_categorienumber(poi.trim(string.sub(string.lower(option), string.find(string.lower(option), "-i") + 2, -1)))
+			
+		end
+		
 		idx = idx or 0 -- Convert a invalid Number to 0
 	end
 	
@@ -190,6 +195,7 @@ function poi.set(name, poi_name)
 		else
 			poi.print(name, "PoI <" .. p_name .. "> exists.", red)
 			return false -- Name exists, leave function
+			
 		end -- if(poi.get_categorie)
 
 	end -- if poi.exist
@@ -553,7 +559,17 @@ function poi.split_option(poi_name)
 	if(string.find(poi_name, ",") ~= nil) then
 		p_name = poi.trim(string.sub(poi_name,1, string.find(poi_name, ",")-1))					-- Extract only the Name
 		categorie = tonumber(poi.trim(string.sub(poi_name,string.find(poi_name, ",")+1,-1)))		-- Extract the Number of Categorie		
-
+		
+		if(categorie == nil) then -- Categorie was not a Number, then check the name
+			categorie = poi.trim(string.sub(poi_name,string.find(poi_name, ",")+1,-1))
+			categorie = poi.get_categorienumber(categorie)	-- Find the Categorienumber
+			if(categorie == nil) then	-- Puuhhh, unknown Categorie
+				categorie = 1		-- ok, set it to 1
+			
+			end -- if(categroie == nil) -- unknown Name
+		
+		end -- if(categorie == nil)
+		
 	else
 		p_name = poi_name	-- No Categorie found, only a Name was given
 
@@ -603,6 +619,32 @@ function poi.get_categoriename(cat)
 
 end -- get_categoriename()
 
+-- Gets a Categorienumber by Name
+function poi.get_categorienumber(name)
+
+	local categorie = nil
+
+	if(name == "" or name == nil) then
+		return categorie
+		
+	end -- if(name)
+		
+	name = string.lower(name)
+	
+	for key, value in pairs(poi.categories) do
+		if(string.lower(value) == name) then
+			categorie = key
+			break
+			
+		end -- if(string.lower)
+		
+	end -- for key,value
+	
+	return categorie
+
+end -- poi.get_categorienumber()
+		
+	
 -- Gets a Categorie of an Entry
 function poi.get_categorie(poi_name)
 	local value, cat, pos
@@ -633,7 +675,7 @@ end -- count_categories()
 --]]
 
 minetest.register_chatcommand("poi_set", {
-	params = "<poi_name, categorie>",
+	params = "<poi_name, Categorie[number]>",
 	description = "Set's a Point of Interest or changes the Categorie of an existing Point.",
 	privs = {poi = true},
 	func = function(name, poi_name)
@@ -654,8 +696,8 @@ minetest.register_chatcommand("poi_gui", {
 	end,
 })
 minetest.register_chatcommand("poi_list", {
-	params = "<-a> <-c> <-f> <-i Number>",
-	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Number> shows only the Entries of the given Categorienumber",
+	params = "<-a> <-c> <-f> <-i [Categorie[Number]]>",
+	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Categorie[number]]> shows only the Entries of the given Categorienumber or Name",
 	privs = {interact = true},
 	func = function(name, arg)
 
@@ -722,7 +764,7 @@ minetest.register_chatcommand("poi_move", {
 })
 
 minetest.register_chatcommand("poi_rename", {
-	params = "<POI Old Name>,<POI New Name",
+	params = "<POI Old Name>,<POI New Name>",
 	description = "Changes the Name of the Point of Interest.",
 	privs = {interact = true},
 	func = function(name, poi_name)
