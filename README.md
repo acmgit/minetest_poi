@@ -42,12 +42,12 @@ This Action will be logged.
 ### /poi_reload
 If the List of POI's are in any kind corrupted, you can reload the List without a new Serverstart.
 
-As Admin, you can grant Privs for the Player.
-
 ### /poi_validate
 Checks the List of Entrys for invalid Names or Positions. If found an Entry, the command deletes it.<br>
 This Function checks the Entries for a Categorienumber, if there is no, it sets to 1 per default.<br>
 This Action will be logged.
+
+As Admin, you can grant Privs for the Player.
 
 ## Privileges
 
