@@ -1,8 +1,9 @@
 poi_namefilter = {}
 poi_categories = {}
 
-dofile(minetest.get_modpath("minetest_poi") .. "/namefilter.lua")
-dofile(minetest.get_modpath("minetest_poi") .. "/categories.lua")
+
+dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !!
+dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/categories.lua")
 
 local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
 local poi = {
@@ -276,26 +277,81 @@ end -- poi.jump()
 
 
 -- shows gui with all available PoIs
-function poi.gui(player_name)
+function poi.gui(player_name, showup)
 	local list = ""
+	local catlist = ""
+	local cat
+	local count = 0
+	
+	
+	
+	
 	for key, value in poi.spairs(poi.points) do	-- Build up the List
-
-         list = list .. key .. ","
+	cat = poi.get_categorie(key)
+	
+	  if not showup then
+	    
+	    if list == "" then
+	               
+		  list = key
+	      
+	    else
+	   
+		  list = list .. "," .. key
+	      
+	    end
+	    count = count +1
+	  else
+	    
+	    if poi.get_categorienumber(showup) == cat then
+	      if list == "" then
+	   
+		  list = key
+	      
+	      else
+	   
+		  list = list .. "," .. key
+	      
+	      end
+	      count = count +1
+	    end
+	  end
 
 	end -- for key,value
+	
+	
+	
+	for key, value in pairs(poi_categories) do      -- build the dropdown menu
+	  
+	  if catlist == "" then
+	  
+	   catlist = value
+	   
+	  else
+	    
+	    catlist = catlist .. "," .. value
+	  
+	  end
+	  
+	   
+	end
 
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
-				"size[4,8]" ..
+				"size[7,8]" ..
 				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
 				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
-				"label[0.6,6;".. poi.count() .. " Points in List]"..
+				"label[0.6,6;".. count .. " Points in List]"..
+				"label[4.3,0.5;> Categories <]"..
+				"dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
 				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
 
 -- Callback for formspec
 minetest.register_on_player_receive_fields(function(player, formname, fields)
+	local callme = ""
 	if formname == "minetest_poi:thegui" then -- The form name
+		
 		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
 		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
 		    local i = 0
@@ -314,6 +370,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		    return false
 
 		end -- if event.type
+		
+		if fields.dname and fields.dname ~= "" then
+		    poi.gui(player:get_player_name(), fields.dname)
+		    return false
+		end
+		  
 
 	end -- if formname
 end)
@@ -810,4 +872,8 @@ poi.openlist() -- Initalize the List on Start
 poi.filter = poi_namefilter
 poi.categories = poi_categories
 poi.max_categories = poi.count_categories()
+
+
+	
+
 
