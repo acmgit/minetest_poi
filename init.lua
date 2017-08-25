@@ -20,6 +20,7 @@ local green = '#00FF00'
 local red = '#FF0000'
 local orange = '#FF6700'
 local none = 99
+local call_list = {}  --important array to find jump station in lists reduced by categories
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
@@ -279,10 +280,10 @@ end -- poi.jump()
 -- shows gui with all available PoIs
 function poi.gui(player_name, showup)
 	local list = ""
-	local catlist = ""
 	local showcat =  ""
 	local cat
 	local count = 0
+	local catlist = ""
 	
 	
 	
@@ -302,6 +303,7 @@ function poi.gui(player_name, showup)
 	      
 	    end
 	    count = count +1
+	    call_list[count] = key  -- makes it easier to find jump point
 	  else
 	    
 	    showcat = "label[0.6,0.4;Categorie is : "..showup.."]" -- show choosen categorie in gui
@@ -316,6 +318,7 @@ function poi.gui(player_name, showup)
 	      
 	      end
 	      count = count +1
+	      call_list[count] = key  -- makes it easier to find jump point
 	    end
 	  end
 
@@ -361,7 +364,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		    local teleport = ""
 		    for key, value in poi.spairs(poi.points) do	-- search for name of indexnumber
 		      i = i+1
-		      if i == event.index then
+		      
+		      if call_list[event.index] == key then  -- now possible to find it by name, not more only by number. important for categories
 			  teleport = key
 			  break
 
