@@ -2,7 +2,7 @@ poi_namefilter = {}
 poi_categories = {}
 
 
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !!
+dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !
 dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/categories.lua")
 
 local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
@@ -280,6 +280,7 @@ end -- poi.jump()
 function poi.gui(player_name, showup)
 	local list = ""
 	local catlist = ""
+	local showcat =  ""
 	local cat
 	local count = 0
 	
@@ -303,6 +304,7 @@ function poi.gui(player_name, showup)
 	    count = count +1
 	  else
 	    
+	    showcat = "label[0.6,0.4;Categorie is : "..showup.."]" -- show choosen categorie in gui
 	    if poi.get_categorienumber(showup) == cat then
 	      if list == "" then
 	   
@@ -339,6 +341,7 @@ function poi.gui(player_name, showup)
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
 				"size[7,8]" ..
 				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
+				showcat..
 				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
 				"label[0.6,6;".. count .. " Points in List]"..
 				"label[4.3,0.5;> Categories <]"..
