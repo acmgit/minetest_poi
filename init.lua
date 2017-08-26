@@ -20,7 +20,10 @@ local green = '#00FF00'
 local red = '#FF0000'
 local orange = '#FF6700'
 local none = 99
-local call_list = {}  --important array to find jump station in lists reduced by categories
+
+-- Options for Categories and Gui management
+local call_list = {}   -- important array to find jump station in lists reduced by categories
+local lastchoice = ""  -- last choosen destination from gui by single_click (android support and useful for extended gui in the future)
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
@@ -269,6 +272,7 @@ function poi.jump(name, poi_name)
 	Position = poi.split_pos_cat(Position)		-- Extract the Position
 	
 	local player = minetest.get_player_by_name(name)
+	lastchoice = ""                                 -- set lastchoice back to zero
 
 	player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
 	poi.print(name, "You are moved to POI: " .. poi_name .. ".", green)
@@ -343,13 +347,14 @@ function poi.gui(player_name, showup)
 
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
 				"size[7,8]" ..
-				"label[0.6,0;PoI-Gui, doubleclick on destination]"..
+				"label[0.4,0;> Doubleclick on destination to teleport <]"..
 				showcat..
 				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
 				"label[0.6,6;".. count .. " Points in List]"..
 				"label[4.3,0.5;> Categories <]"..
 				"dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
-				"button_exit[0.4,7;3.4,1;poi.exit;Quit]"
+				"button[0.4,6.5;1,1;poitelme;<Go>]"..
+				"button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
 
@@ -357,25 +362,23 @@ end -- poi.gui()
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local callme = ""
 	if formname == "minetest_poi:thegui" then -- The form name
+	
 		
 		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
-		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
-		    local i = 0
-		    local teleport = ""
-		    for key, value in poi.spairs(poi.points) do	-- search for name of indexnumber
-		      i = i+1
-		      
-		      if call_list[event.index] == key then  -- now possible to find it by name, not more only by number. important for categories
-			  teleport = key
-			  break
-
-		      end -- if event.index
-
-		    end -- for key,value
-
-		    poi.jump(player:get_player_name(), teleport) -- gogogo :D
+		
+		if fields.poitelme and lastchoice ~= "" then                -- single click and go-Button is much easier for tablet users
+		    poi.jump(player:get_player_name(), lastchoice)
 		    return false
-
+		end
+		
+		
+		if (event.type == "CHG") and event.index then              -- save the last choosen categorie by singleclick
+		    lastchoice = call_list[event.index]
+		end
+		
+		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
+		   poi.jump(player:get_player_name(), call_list[event.index])
+		  return false
 		end -- if event.type
 		
 		if fields.dname and fields.dname ~= "" then
