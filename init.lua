@@ -193,7 +193,7 @@ function poi.set(name, poi_name)
 			return true
 			
 		else
-			poi.print(name, "PoI <" .. p_name .. "> exists.", red)
+			poi.print(name, "PoI <" .. p_name .. "> in Categorie <" .. categorie .. " - " .. poi.get_categoriename(categorie) .. "> already exists.", red)
 			return false -- Name exists, leave function
 			
 		end -- if(poi.get_categorie)
@@ -201,7 +201,7 @@ function poi.set(name, poi_name)
 	end -- if poi.exist
 
 	if not poi.check_name(p_name) then
-		poi.print(name, "Invalid Name <" .. p_name .. "> for PoI.", red)
+		poi.print(name, "Invalid or Forbidden Name <" .. p_name .. "> for PoI.", red)
 		return false
 
 	end -- if poi.check_name
