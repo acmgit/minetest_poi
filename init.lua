@@ -193,11 +193,7 @@ function poi.set(name, poi_name)
 			return true
 			
 		else
-<<<<<<< HEAD
 			poi.print(name, "PoI <" .. p_name .. "> in Categorie <" .. categorie .. " - " .. poi.get_categoriename(categorie) .. "> already exists.", red)
-=======
-			poi.print(name, "PoI <" .. p_name .. "> in Categorie " .. poi.get_categoriename(categorie) .. " already exists.", red)
->>>>>>> 9e5563b6df2e5e4503cbed309d1d32173c86d222
 			return false -- Name exists, leave function
 			
 		end -- if(poi.get_categorie)
