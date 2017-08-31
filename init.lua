@@ -188,6 +188,12 @@ function poi.set(name, poi_name)
 	
 	if poi.exist(p_name) then -- Ups, Name exists
 		if(poi.get_categorie(p_name) ~= categorie) then -- ok, we want to change the Categorie
+			if(categorie == -1) then	-- Invalid Categoriename?
+				poi.print(name, "Given Categorie don't exists.", red)
+				return false
+				
+			end -- if(poi.get_categoriename())
+			
 			local value = poi.points[p_name]
 			local pos, cat
 			pos, cat = poi.split_pos_cat(poi.points[p_name])
@@ -211,6 +217,11 @@ function poi.set(name, poi_name)
 
 	end -- if poi.check_name
 
+	if(categorie == -1) then  -- Checks invalid Categoriename, then set it on new Entry to 1
+		poi.print(name, "Warning: Unkown Categorie, set to Categorie 1.", red)
+		categorie = 1
+	end
+	
 	poi.points[p_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(categorie) .. "}"-- Insert the new Entry
 	poi.save() -- and write the new List
 
@@ -636,9 +647,9 @@ function poi.split_option(poi_name)
 			categorie = poi.trim(string.sub(poi_name,string.find(poi_name, ",")+1,-1))
 			categorie = poi.get_categorienumber(categorie)	-- Find the Categorienumber
 			if(categorie == nil) then	-- Puuhhh, unknown Categorie
-				categorie = 1		-- ok, set it to 1
+				categorie = -1		-- ok, set it to 1
 			
-			end -- if(categroie == nil) -- unknown Name
+			end -- if(categorie == nil) -- unknown Name
 		
 		end -- if(categorie == nil)
 		
