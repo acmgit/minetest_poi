@@ -10,5 +10,7 @@ poi_categories = {
    "Markets",
    "Landscapes",
    "Caves",
-   "Museums"
+   "Museums",
+   "Education",
+   "Recreation"
 }
