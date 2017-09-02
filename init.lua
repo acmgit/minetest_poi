@@ -365,6 +365,7 @@ function poi.gui(player_name, showup)
 				"label[4.3,0.5;> Categories <]"..
 				"dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
 				"button[0.4,6.5;1,1;poitelme;<Go>]"..
+				"button[4,3;2,1;poishowall;<ShowAll>]"..
 				"button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
@@ -376,6 +377,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	
 		
 		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
+		    
+		if fields.poishowall then
+		    lastchoice = nil
+		    poi.gui(player:get_player_name(), nil)
+		    return false
+		end
 		
 		if fields.poitelme and lastchoice ~= "" then                -- single click and go-Button is much easier for tablet users
 		    poi.jump(player:get_player_name(), lastchoice)
