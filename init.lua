@@ -11,7 +11,7 @@ local poi = {
 	points = {},
 	filter = {},
 	categories = {},
-	max_categories
+	modpath = minetest.get_modpath(minetest.get_current_modname()),
 }
 
 -- Options for Print_Message
@@ -285,6 +285,7 @@ function poi.jump(name, poi_name)
 	local player = minetest.get_player_by_name(name)
 	lastchoice = ""                                 -- set lastchoice back to zero
 
+	poi.play_soundeffect(name, "teleport") -- Play's a Sound
 	player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
 	poi.print(name, "You are moved to POI: " .. poi_name .. ".", green)
 	return true
@@ -757,7 +758,23 @@ function poi.count_categories()
 	return cat
 
 end -- count_categories()
+
+function poi.play_soundeffect(name, soundname)
+
+	if(soundname == nil or soundname == "") then
+		soundname = "teleport"
 	
+	end -- if(soundname)
+
+	minetest.sound_play("minetest_poi_" .. soundname, {
+		to_player = name,
+		loop = false,
+	})
+			
+	--poi.print(name, name .. " has played the Sound: " .. poi.modpath .. "/sounds/minetest_poi_" .. soundname .. ".ogg.", log)
+	
+end -- poi.play_soundeffect()
+
 --[[
 	********************************************
 	***         Commands to Register             ***
