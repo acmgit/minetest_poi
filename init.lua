@@ -212,6 +212,7 @@ function poi.set(name, poi_name)
 	end -- if poi.exist
 
 	if not poi.check_name(p_name) then
+		poi_name = poi.convertnil(poi_name) -- convert possible NIL		
 		poi.print(name, "Invalid or Forbidden Name <" .. p_name .. "> for PoI.", red)
 		return false
 
@@ -242,6 +243,8 @@ function poi.delete(name, poi_name)
 	end
 
 	if poi.exist(poi_name) == false then
+
+		poi_name = poi.convertnil(poi_name) -- convert possible NIL
 		poi.print(name,  "PoI <" .. poi_name .. "> unknown to delete.", red)
 		return false -- can't delete a non-existing Entry, leave function
 
@@ -274,6 +277,7 @@ end -- poi.reload()
 function poi.jump(name, poi_name)
 
 	if (poi.exist(poi_name) == false) then -- Unknown or not existing Point of Interest
+		poi_name = poi.convertnil(poi_name) -- convert possible NIL			
 		poi.print(name, "Unknown Point of Interest: " .. poi_name .. ".", red)
 		return false -- POI not in List, leave function
 
@@ -413,6 +417,7 @@ end)
 function poi.move(name, poi_name)
 
 	if (poi.exist(poi_name) == false) then
+		poi_name = poi.convertnil(poi_name) -- convert possible NIL		
 		poi.print(name, "Unknown PoI <" .. poi_name .. ">.", red)
 		return false
 
@@ -774,6 +779,17 @@ function poi.play_soundeffect(name, soundname)
 	--poi.print(name, name .. " has played the Sound: " .. poi.modpath .. "/sounds/minetest_poi_" .. soundname .. ".ogg.", log)
 	
 end -- poi.play_soundeffect()
+
+function poi.convertnil(poi_name)
+
+	if(poi_name == nil) then
+		poi_name = " "
+	
+	end
+	
+	return poi_name
+
+end -- poi.convertnil()
 
 --[[
 	********************************************
