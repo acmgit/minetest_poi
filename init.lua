@@ -373,7 +373,7 @@ end -- poi.gui()
 -- Callback for formspec
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local callme = ""
-	if formname == "minetest_poi:thegui" then -- The form name
+	if formname == "minetest_poi:thegui" and player then -- The form name and player must be online
 	
 		
 		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
@@ -882,10 +882,15 @@ if (minetest.get_modpath("unified_inventory")) then
 		type = "image",
 		image = "minetest_poi_button_32x32.png",
 		tooltip = "Show Points of Interest",
+		hide_lite=true,
 		action = function(player)
 			local player_name = player:get_player_name()
 			if not player_name then return end
-			poi.gui(player_name)
+			if minetest.check_player_privs(player_name, {interact=true}) then
+			  poi.gui(player_name)
+			else
+			  minetest.chat_send_player(player_name,core.colorize(red, "You need the")..core.colorize(green," interact")..core.colorize(red," priv, please type")..core.colorize(green," /rules")..core.colorize(red," and search for the keyword"))
+			end
 		end,
 	})
 end
