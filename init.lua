@@ -51,21 +51,21 @@ function poi.save()
 end -- poi.save()
 
 -- Loads the List of POI's  Read PoIs from the old file  --  Can be disabled in the future only for backward compatibility
-function poi.oldlist(name)
-	local file = io.open(minetest.get_worldpath().."/poi.txt", "r") -- Try to open the file
-
-	if file then -- is open?
-		local table = minetest.deserialize(file:read("*all"))
-			if type(table) == "table" then
-				poi.points = nil
-				poi.points = table.points
-				poi.print(name, "POI-List reloaded.", green)
-
-			end -- if type(table)
-
-	end -- if file
-
-end -- poi.openlist()
+--function poi.oldlist(name)
+--	local file = io.open(minetest.get_worldpath().."/poi.txt", "r") -- Try to open the file
+--
+--	if file then -- is open?
+--		local table = minetest.deserialize(file:read("*all"))
+--			if type(table) == "table" then
+--				poi.points = nil
+--				poi.points = table.points
+--				poi.print(name, "POI-List reloaded.", green)
+--
+--			end -- if type(table)
+--
+--	end -- if file
+--
+--end -- poi.openlist()
 
 -- Helpfunctions for the List-Command
 function poi.list_filter(name)
@@ -852,17 +852,17 @@ minetest.register_chatcommand("poi_reload", {
 })
 
 -- This command can be deleted in futures version, it is only to read old lists of minetest-poi beta
-minetest.register_chatcommand("poi_import", {
-	params = "",
-	description = "Imports the PoIs of older poi-mod version, this will delete all current PoIs",
-	privs = {poi = true},
-	func = function(name)
-
-		poi.oldlist(name)
-		poi.save()
-
-	end,
-})
+--minetest.register_chatcommand("poi_import", {
+--	params = "",
+--	description = "Imports the PoIs of older poi-mod version, this will delete all current PoIs",
+--	privs = {poi = true},
+--	func = function(name)
+--
+--		poi.oldlist(name)
+--		poi.save()
+--
+--	end,
+--})
 
 minetest.register_chatcommand("poi_jump", {
 	params = "<POI-Name>",
