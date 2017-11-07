@@ -431,8 +431,7 @@ function poi.move(name, poi_name)
 	local exist = false
 	local player = minetest.get_player_by_name(name)
 	local currpos = player:getpos(name)
-	local oldpos = poi.points[poi_name]
-	local cat = poi.split_pos_cat(oldpos)
+	local oldpos, cat = poi.split_pos_cat(poi.points[poi_name])
 	
 	poi.points[poi_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(cat) .. "}" -- Write the Position new
 	poi.save() -- and write the List
