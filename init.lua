@@ -304,6 +304,7 @@ function poi.gui(player_name, showup)
 	local cat
 	local count = 0
 	local catlist = ""
+	local manageme = ""
 	
 	
 	
@@ -361,16 +362,20 @@ function poi.gui(player_name, showup)
 	   
 	end
 
+	if minetest.get_player_privs(player_name).poi then
+	    manageme = "button_exit[5,6.5;2,1;poimanager;Manage_PoI]"
+	end
+		
 	minetest.show_formspec(player_name,"minetest_poi:thegui",
 				"size[7,8]" ..
 				"label[0.4,0;> Doubleclick on destination to teleport <]"..
 				showcat..
 				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
 				"label[0.6,6;".. count .. " Points in List]"..
-				"label[4.3,0.5;> Categories <]"..
+				"label[4.3,0.5; Categories ]"..
 				"dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
-				"button[0.4,6.5;1,1;poitelme;<Go>]"..
-				"button[4,3;2,1;poishowall;<ShowAll>]"..
+				"button[0.4,6.5;1,1;poitelme;Go]"..
+				"button[1.4,6.5;2,1;poishowall;ShowAll]"..manageme..
 				"button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
 				)
 end -- poi.gui()
