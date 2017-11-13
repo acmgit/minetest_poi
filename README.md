@@ -51,12 +51,12 @@ As Admin, you can grant Privs for the Player.
 
 ## Privileges
 
-interact:<br>
+### interact:<br>
 /poi_jump [name]<br>
 /poi_list [-a]  [-f]  [-c]  [-i <Categorie[number>]]<br>
 /poi_gui<br>
 
-poi:<br>
+### poi:<br>
 /poi_set [name][, Categorie[number]]<br>
 /poi_delete [name]<br>
 /poi_reload<br>
