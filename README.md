@@ -5,7 +5,7 @@ A Mod for Minetest.
 ![Screenshot 1](textures/minetest_poi_screenshot.jpg)
 
 This Mod adds PoI's, Point's of Interest to your World.
-If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand.
+If you have set a PoI, you can everytime jump back to the PoI with a simple Chatcommand or easy with the GUI.
 
 ### /poi_list [-a]  [-f]  [-c]  [-i <Number>]
 Lists Points of Interest.<br>
@@ -62,7 +62,10 @@ poi:<br>
 /poi_reload<br>
 /poi_move [name]<br>
 /poi_rename [name1], [name2]<br>
-/poi_validate
+/poi_validate<br><br>
+
+With this Privileg, you have access to the grafical POI-Manager:
+![Screenshot 2](textures/minetest_poi_manager.jpg)
 
 ## Install
 

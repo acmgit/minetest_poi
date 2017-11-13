@@ -172,6 +172,10 @@ function poi.set(name, poi_name)
 	
 	p_name, categorie = poi.split_option(poi_name)
 	
+	-- Check Categorie, if Unknown then set it to General
+	if categorie == 0 then categorie = 1
+	end
+	
 	if poi.exist(p_name) then -- Ups, Name exists
 		if(poi.get_categorie(p_name) ~= categorie) then -- ok, we want to change the Categorie
 			if(categorie == -1) then	-- Invalid Categoriename?
@@ -382,7 +386,7 @@ function poi.gui(player_name, showup, main)
 				      "button[4,2.5;2,1;reload;Reload]"..
 				      "button[4,3.5;2,1;validate;Validate]"..
 				      "field[0.3,5.4;7,1;managename;                                                                                      - enter name -;"..selected_point.."]"..
-				      "button[0.4,6;6,1;set;Set]"..
+				      "button[0.4,6;6,1;set;Set Point or change Categorie]"..
 				      "button[0.4,7;2,1;rename;Rename]"..
 				      "button[2.4,7;2,1;move;Move]"..
 				      "image_button[5.4,7;1,1;minetest_poi_deleteme.png;delete;]"..
