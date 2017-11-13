@@ -24,6 +24,9 @@ local none = 99
 -- Options for Categories and Gui management
 local call_list = {}   -- important array to find jump station in lists reduced by categories
 local lastchoice = ""  -- last choosen destination from gui by single_click (android support and useful for extended gui in the future)
+local selected_category = 0
+local choosen_name = 0
+local selected_point = ""
 
 minetest.register_privilege("poi", "Player may set Points of Interest.")
 
@@ -49,23 +52,6 @@ function poi.save()
 	storage:from_table({fields=poi.points})
 	
 end -- poi.save()
-
--- Loads the List of POI's  Read PoIs from the old file  --  Can be disabled in the future only for backward compatibility
---function poi.oldlist(name)
---	local file = io.open(minetest.get_worldpath().."/poi.txt", "r") -- Try to open the file
---
---	if file then -- is open?
---		local table = minetest.deserialize(file:read("*all"))
---			if type(table) == "table" then
---				poi.points = nil
---				poi.points = table.points
---				poi.print(name, "POI-List reloaded.", green)
---
---			end -- if type(table)
---
---	end -- if file
---
---end -- poi.openlist()
 
 -- Helpfunctions for the List-Command
 function poi.list_filter(name)
@@ -297,13 +283,23 @@ function poi.jump(name, poi_name)
 end -- poi.jump()
 
 
+
+-- ***********************************
+-- ***********************************
+-- ** The Gui section starting here **
+-- ***********************************
+-- ***********************************
+
+
 -- shows gui with all available PoIs
-function poi.gui(player_name, showup)
+function poi.gui(player_name, showup, main)
 	local list = ""
 	local showcat =  ""
 	local cat
 	local count = 0
 	local catlist = ""
+	local manageme = ""
+	
 	
 	
 	
@@ -361,18 +357,39 @@ function poi.gui(player_name, showup)
 	   
 	end
 
-	minetest.show_formspec(player_name,"minetest_poi:thegui",
-				"size[7,8]" ..
-				"label[0.4,0;> Doubleclick on destination to teleport <]"..
-				showcat..
-				"textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
-				"label[0.6,6;".. count .. " Points in List]"..
-				"label[4.3,0.5;> Categories <]"..
-				"dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
-				"button[0.4,6.5;1,1;poitelme;<Go>]"..
-				"button[4,3;2,1;poishowall;<ShowAll>]"..
-				"button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
-				)
+	if minetest.get_player_privs(player_name).poi then
+	    manageme = "button[5,6.5;2,1;poimanager;Manage_PoI]"
+	end
+		
+	if main then
+	      minetest.show_formspec(player_name,"minetest_poi:thegui",                            -- The main gui for everyone with interact
+				      "size[7,8]" ..
+				      "label[0.4,0;> Doubleclick on destination to teleport <]"..
+				      showcat..
+				      "textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
+				      "label[0.6,6;".. count .. " Points in List]"..
+				      "label[4.3,0.5; Categories ]"..
+				      "dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
+				      "button[0.4,6.5;1,1;poitelme;Go]"..
+				      "button[1.4,6.5;2,1;poishowall;ShowAll]"..manageme..
+				      "button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
+				      )
+	else
+	      minetest.show_formspec(player_name,"minetest_poi:manager",                            -- The management gui for people with poi priv
+				      "size[7,9]" ..
+				      "textlist[0.4,0;3,5;maname;"..list..";"..choosen_name..";false]"..
+				      "textlist[4,0;2,2;madname;"..catlist..";"..selected_category..";false]".. 
+				      "button[4,2.5;2,1;reload;Reload]"..
+				      "button[4,3.5;2,1;validate;Validate]"..
+				      "field[0.3,5.4;7,1;managename;                                                                                      - enter name -;"..selected_point.."]"..
+				      "button[0.4,6;6,1;set;Set]"..
+				      "button[0.4,7;2,1;rename;Rename]"..
+				      "button[2.4,7;2,1;move;Move]"..
+				      "image_button[5.4,7;1,1;minetest_poi_deleteme.png;delete;]"..
+				      "button_exit[0.4,8;3,1;doexit;Quit]"..
+				      "button[3.4,8;3,1;goback;Back]"
+				      )
+	end
 end -- poi.gui()
 
 -- Callback for formspec
@@ -385,10 +402,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		    
 		if fields.poishowall then
 		    lastchoice = nil
-		    poi.gui(player:get_player_name(), nil)
+		    poi.gui(player:get_player_name(), nil, true)
 		    return false
 		end
 		
+		if fields.poimanager then
+		    poi.gui(player:get_player_name(), nil, false)
+		    return false
+		end
+		
+
 		if fields.poitelme and lastchoice ~= "" then                -- single click and go-Button is much easier for tablet users
 		    poi.jump(player:get_player_name(), lastchoice)
 		    return false
@@ -405,13 +428,94 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end -- if event.type
 		
 		if fields.dname and fields.dname ~= "" then
-		    poi.gui(player:get_player_name(), fields.dname)
+		    poi.gui(player:get_player_name(), fields.dname, true)
 		    return false
 		end
 		  
 
 	end -- if formname
+	
+	if formname == "minetest_poi:manager" and player then -- The form name and player must be online
+	
+		local event = minetest.explode_textlist_event(fields.maname)  -- get values of what was clicked in PoI
+		local catevent = minetest.explode_textlist_event(fields.madname)  -- get values of what was clicked in Categories
+	
+		if fields.goback then
+			selected_category = 0
+			choosen_name = 0
+			selected_point = ""
+			poi.gui(player:get_player_name(), nil, true)
+			return false
+		end
+		
+		if fields.doexit then
+			selected_category = 0
+			choosen_name = 0
+			selected_point = ""
+			return false
+		end
+		
+		if fields.reload then
+			poi.reload(player:get_player_name())
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.validate then
+			poi.validate(player:get_player_name())
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.delete then
+			poi.delete(player:get_player_name(),selected_point)
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.move then
+			poi.move(player:get_player_name(),selected_point)
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.rename then
+			poi.rename(player:get_player_name(),selected_point..","..fields.managename)
+			--minetest.chat_send_all(" >>> "..selected_point.." , "..fields.managename)
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.managename then
+			choosen_name = 0
+			selected_point = fields.managename
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if fields.set then
+			poi.set(player:get_player_name(), selected_point..","..selected_category)
+			selected_category = 0
+			choosen_name = 0
+			selected_point = ""
+			poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if (event.type == "CHG") and event.index then              -- save the last choosen poi
+		    selected_point = call_list[event.index]
+		    choosen_name = event.index
+		    selected_category = poi.get_categorie(selected_point)
+		    poi.gui(player:get_player_name(), nil, false)
+		end
+		
+		if (catevent.type == "CHG") and catevent.index then              -- save the last choosen category
+		    selected_category = catevent.index
+		    poi.gui(player:get_player_name(), nil, false)
+		end
+	end
+		
 end)
+
+
+-- *********************************
+-- *********************************
+-- ** The Gui section ending here **
+-- *********************************
+-- *********************************
 
 -- Changes a POI-Position
 function poi.move(name, poi_name)
@@ -813,7 +917,7 @@ minetest.register_chatcommand("poi_gui", {
 	privs = {interact = true},
 	func = function(name)
 
-      poi.gui(name)
+      poi.gui(name,nil,true)
 
 	end,
 })
@@ -850,18 +954,6 @@ minetest.register_chatcommand("poi_reload", {
 	end,
 })
 
--- This command can be deleted in futures version, it is only to read old lists of minetest-poi beta
---minetest.register_chatcommand("poi_import", {
---	params = "",
---	description = "Imports the PoIs of older poi-mod version, this will delete all current PoIs",
---	privs = {poi = true},
---	func = function(name)
---
---		poi.oldlist(name)
---		poi.save()
---
---	end,
---})
 
 minetest.register_chatcommand("poi_jump", {
 	params = "<POI-Name>",
@@ -919,7 +1011,7 @@ if (minetest.get_modpath("unified_inventory")) then
 			local player_name = player:get_player_name()
 			if not player_name then return end
 			if minetest.check_player_privs(player_name, {interact=true}) then
-			  poi.gui(player_name)
+			  poi.gui(player_name,nil,true)
 			else
 			  minetest.chat_send_player(player_name,core.colorize(red, "You need the")..core.colorize(green," interact")..core.colorize(red," priv, please type")..core.colorize(green," /rules")..core.colorize(red," and search for the keyword"))
 			end
