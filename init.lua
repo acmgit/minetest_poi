@@ -441,6 +441,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	
 	if formname == "minetest_poi:manager" and player then -- The form name and player must be online
 	
+		local youaretheboss = minetest.get_player_privs(player:get_player_name()).server
 		local event = minetest.explode_textlist_event(fields.maname)  -- get values of what was clicked in PoI
 		local catevent = minetest.explode_textlist_event(fields.madname)  -- get values of what was clicked in Categories
 	
@@ -470,18 +471,22 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		
 		if fields.delete then
+		      if youaretheboss then                                      -- Sorry I couldn't resist :D
 			poi.delete(player:get_player_name(),selected_point)
 			poi.gui(player:get_player_name(), nil, false)
+		      else
+			poi.print(player:get_player_name()," >>> Sorry this button is for admin only, please use /poi_delete "..selected_point,red)
+		      end
 		end
 		
 		if fields.move then
 			poi.move(player:get_player_name(),selected_point)
 			poi.gui(player:get_player_name(), nil, false)
+			
 		end
 		
 		if fields.rename then
 			poi.rename(player:get_player_name(),selected_point..","..fields.managename)
-			--minetest.chat_send_all(" >>> "..selected_point.." , "..fields.managename)
 			poi.gui(player:get_player_name(), nil, false)
 		end
 		
