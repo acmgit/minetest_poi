@@ -27,8 +27,11 @@ local lastchoice = ""  -- last choosen destination from gui by single_click (and
 local selected_category = 0
 local choosen_name = 0
 local selected_point = ""
+local drop_down = 0
+local catlist = ""
 
-minetest.register_privilege("poi", "Player may set Points of Interest.")
+
+minetest.register_privilege("poi", "Player may set and manage Points of Interest.")
 
 
 --[[
@@ -301,10 +304,7 @@ function poi.gui(player_name, showup, main)
 	local showcat =  ""
 	local cat
 	local count = 0
-	local catlist = ""
 	local manageme = ""
-	
-	
 	
 	
 	
@@ -312,6 +312,7 @@ function poi.gui(player_name, showup, main)
 	cat = poi.get_categorie(key)
 	
 	  if not showup then
+	    drop_down = 0
 	    
 	    if list == "" then
 	               
@@ -325,8 +326,8 @@ function poi.gui(player_name, showup, main)
 	    count = count +1
 	    call_list[count] = key  -- makes it easier to find jump point
 	  else
-	    
-	    showcat = "label[0.6,0.4;Categorie is : "..showup.."]" -- show choosen categorie in gui
+	    drop_down = poi.get_categorienumber(showup)
+	    --showcat = "label[0.6,0.4;Categorie is : "..showup.."]" -- show choosen categorie in gui ##not needed anymore 
 	    if poi.get_categorienumber(showup) == cat then
 	      if list == "" then
 	   
@@ -343,23 +344,6 @@ function poi.gui(player_name, showup, main)
 	  end
 
 	end -- for key,value
-	
-	
-	
-	for key, value in pairs(poi_categories) do      -- build the dropdown menu
-	  
-	  if catlist == "" then
-	  
-	   catlist = value
-	   
-	  else
-	    
-	    catlist = catlist .. "," .. value
-	  
-	  end
-	  
-	   
-	end
 
 	if minetest.get_player_privs(player_name).poi then
 	    manageme = "button[5,6.5;2,1;poimanager;Manage_PoI]"
@@ -369,14 +353,14 @@ function poi.gui(player_name, showup, main)
 	      minetest.show_formspec(player_name,"minetest_poi:thegui",                            -- The main gui for everyone with interact
 				      "size[7,8]" ..
 				      "label[0.4,0;> Doubleclick on destination to teleport <]"..
-				      showcat..
+				      --showcat..
 				      "textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
 				      "label[0.6,6;".. count .. " Points in List]"..
 				      "label[4.3,0.5; Categories ]"..
-				      "dropdown[4,1;2,1;dname;"..catlist..";selected_id]"..
+				      "dropdown[4,1;2,1;dname;"..catlist..";"..drop_down.."]"..
 				      "button[0.4,6.5;1,1;poitelme;Go]"..
 				      "button[1.4,6.5;2,1;poishowall;ShowAll]"..manageme..
-				      "button_exit[0.4,7.4;3.4,1;poi.exit;Quit]"
+				      "button_exit[0.4,7.4;3.4,1;poiexit;Quit]"
 				      )
 	else
 	      minetest.show_formspec(player_name,"minetest_poi:manager",                            -- The management gui for people with poi priv
@@ -398,12 +382,19 @@ end -- poi.gui()
 
 -- Callback for formspec
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	local callme = ""
 	if formname == "minetest_poi:thegui" and player then -- The form name and player must be online
 	
 		
 		local event = minetest.explode_textlist_event(fields.name)  -- get values of what was clicked
+		
 		    
+		if fields.poiexit then
+			lastchoice = nil
+			choosen_name = 0
+			selected_point = ""
+			return false
+		end
+		
 		if fields.poishowall then
 		    lastchoice = nil
 		    poi.gui(player:get_player_name(), nil, true)
@@ -422,20 +413,22 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		
 		
-		if (event.type == "CHG") and event.index then              -- save the last choosen categorie by singleclick
+		if (event.type == "CHG") and event.index then              -- save the last choosen PoI by singleclick
 		    lastchoice = call_list[event.index]
 		end
+		
+		
+		if fields.dname and fields.dname ~= "" then
+			  poi.gui(player:get_player_name(), fields.dname, true)
+		end
+		
 		
 		if (event.type == "DCL") then               -- DCL =doubleclick CHG = leftclick single   by minetest definition
 		   poi.jump(player:get_player_name(), call_list[event.index])
 		  return false
 		end -- if event.type
 		
-		if fields.dname and fields.dname ~= "" then
-		    poi.gui(player:get_player_name(), fields.dname, true)
-		    return false
-		end
-		  
+		
 
 	end -- if formname
 	
@@ -673,6 +666,24 @@ function poi.trim(myString)
 	return (string.gsub(myString, "^%s*(.-)%s*$", "%1"))
 
 end -- poi.trim()
+
+
+-- builds the list of Categories for drop down menu in the gui
+function poi.build_cat_list()
+      for key, value in pairs(poi_categories) do      -- build the dropdown menu
+	  
+	  if catlist == "" then
+	  
+	   catlist = value
+	   
+	  else
+	    
+	    catlist = catlist .. "," .. value
+	  
+	  end
+      end
+end
+      
 
 -- Checks the valid of the name
 function poi.check_name(name)
@@ -1038,6 +1049,8 @@ poi.openlist() -- Initalize the List on Start
 poi.filter = poi_namefilter
 poi.categories = poi_categories
 poi.max_categories = poi.count_categories()
+poi.build_cat_list()
+
 
 
 	
