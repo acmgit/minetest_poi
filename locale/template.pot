@@ -1,0 +1,333 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-24 04:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: init.lua
+msgid "Player may set and manage Points of Interest."
+msgstr ""
+
+#: init.lua
+msgid " Filter in List."
+msgstr ""
+
+#: init.lua
+msgid " Categories in List."
+msgstr ""
+
+#: init.lua
+msgid "Point's of Interest in Categorie "
+msgstr ""
+
+#: init.lua
+msgid " are:"
+msgstr ""
+
+#: init.lua
+msgid " Point's of Interest are:"
+msgstr ""
+
+#: init.lua
+msgid " Categorie: "
+msgstr ""
+
+#: init.lua
+msgid "Given Categorie don't exists."
+msgstr ""
+
+#: init.lua
+msgid " has changed the POI: "
+msgstr ""
+
+#: init.lua
+msgid " at "
+msgstr ""
+
+#: init.lua
+msgid " to Categorie: "
+msgstr ""
+
+#: init.lua
+msgid " in Categorie: "
+msgstr ""
+
+#: init.lua
+msgid " changed to Categorie: "
+msgstr ""
+
+#: init.lua
+msgid "> in Categorie <"
+msgstr ""
+
+#: init.lua
+msgid "> already exists."
+msgstr ""
+
+#: init.lua
+msgid "Invalid or Forbidden Name <"
+msgstr ""
+
+#: init.lua
+msgid "> for PoI."
+msgstr ""
+
+#: init.lua
+msgid "Warning: Unkown Categorie, set to Categorie 1."
+msgstr ""
+
+#: init.lua
+msgid " has set the POI: "
+msgstr ""
+
+#: init.lua
+msgid " stored."
+msgstr ""
+
+#: init.lua
+msgid "Name of the PoI needed."
+msgstr ""
+
+#: init.lua
+msgid "> unknown to delete."
+msgstr ""
+
+#: init.lua
+msgid " has deleted POI-Name: "
+msgstr ""
+
+#: init.lua
+msgid " deleted."
+msgstr ""
+
+#: init.lua
+msgid "POI-List reloaded."
+msgstr ""
+
+#: init.lua
+msgid "Unknown Point of Interest: "
+msgstr ""
+
+#: init.lua
+msgid "You are moved to POI: "
+msgstr ""
+
+#: init.lua
+msgid "Manage_PoI]"
+msgstr ""
+
+#: init.lua
+msgid "Doubleclick on destination to teleport"
+msgstr ""
+
+#: init.lua
+msgid " Points in List]"
+msgstr ""
+
+#: init.lua
+msgid "Categories ]"
+msgstr ""
+
+#: init.lua
+msgid "Go]"
+msgstr ""
+
+#: init.lua
+msgid "ShowAll]"
+msgstr ""
+
+#: init.lua
+msgid "Quit]"
+msgstr ""
+
+#: init.lua
+msgid "Reload"
+msgstr ""
+
+#: init.lua
+msgid "Validate"
+msgstr ""
+
+#: init.lua
+msgid "Set Point or change Categorie"
+msgstr ""
+
+#: init.lua
+msgid "Rename"
+msgstr ""
+
+#: init.lua
+msgid "Move"
+msgstr ""
+
+#: init.lua
+msgid "Quit"
+msgstr ""
+
+#: init.lua
+msgid "Back"
+msgstr ""
+
+#: init.lua
+msgid " >>> Sorry this button is for admin only, please use /poi_delete "
+msgstr ""
+
+#: init.lua
+msgid "Unknown PoI <"
+msgstr ""
+
+#: init.lua
+msgid " has moved the POI: "
+msgstr ""
+
+#: init.lua
+msgid " to Position: "
+msgstr ""
+
+#: init.lua
+msgid " moved to Position: "
+msgstr ""
+
+#: init.lua
+msgid "/poi_rename: No new Name for Point given."
+msgstr ""
+
+#: init.lua
+msgid "Point to rename not found."
+msgstr ""
+
+#: init.lua
+msgid "Invalid new Pointname."
+msgstr ""
+
+#: init.lua
+msgid "New Pointname already exists."
+msgstr ""
+
+#: init.lua
+msgid " has renamed POI-Name: "
+msgstr ""
+
+#: init.lua
+msgid " to: "
+msgstr ""
+
+#: init.lua
+msgid " - Position: "
+msgstr ""
+
+#: init.lua
+msgid "PoI-Name: "
+msgstr ""
+
+#: init.lua
+msgid " renamed to "
+msgstr ""
+
+#: init.lua
+msgid " invalid PoI's found and deleted."
+msgstr ""
+
+#: init.lua
+msgid " PoI's with an invalid Categorie found and set to 1."
+msgstr ""
+
+#: init.lua
+msgid "No invalid PoI found."
+msgstr ""
+
+#: init.lua
+msgid "<poi_name, Categorie[number]>"
+msgstr ""
+
+#: init.lua
+msgid ""
+"Set's a Point of Interest or changes the Categorie of an existing Point."
+msgstr ""
+
+#: init.lua
+msgid "Shows PoIs in a GUI."
+msgstr ""
+
+#: init.lua
+msgid "<-a> <-c> <-f> <-i [Categorie[Number]]>"
+msgstr ""
+
+#: init.lua
+msgid ""
+"Shows Point's of Interest.\n"
+"Option -a shows Point's of Interest with Coordinates.\n"
+"Option -c shows you Categories.\n"
+"Option -f shows you the Namefilter\n"
+"Option -i <Categorie[number]]> shows only the Entries of the given "
+"Categorienumber or Name"
+msgstr ""
+
+#: init.lua
+msgid "<POI-Name>"
+msgstr ""
+
+#: init.lua
+msgid "Deletes a Point of Interest."
+msgstr ""
+
+#: init.lua
+msgid "Loads the List of POI's new."
+msgstr ""
+
+#: init.lua
+msgid "Jumps to the Position of the Point of Interest."
+msgstr ""
+
+#: init.lua
+msgid "Changes the Position of the Point of Interest."
+msgstr ""
+
+#: init.lua
+msgid "<POI Old Name>,<POI New Name>"
+msgstr ""
+
+#: init.lua
+msgid "Changes the Name of the Point of Interest."
+msgstr ""
+
+#: init.lua
+msgid "Validates the List of PoI's."
+msgstr ""
+
+#: init.lua
+msgid "Show Points of Interest"
+msgstr ""
+
+#: init.lua
+msgid "You need the"
+msgstr ""
+
+#: init.lua
+msgid " interact"
+msgstr ""
+
+#: init.lua
+msgid " priv, please type"
+msgstr ""
+
+#: init.lua
+msgid " /rules"
+msgstr ""
+
+#: init.lua
+msgid " and search for the keyword"
+msgstr ""
