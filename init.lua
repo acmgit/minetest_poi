@@ -1053,3 +1053,5 @@ poi.filter = poi_namefilter
 poi.categories = poi_categories
 poi.max_categories = poi.count_categories()
 poi.build_cat_list()
+
+print("[MOD] " .. minetest.get_current_modname() .. " loaded.")
