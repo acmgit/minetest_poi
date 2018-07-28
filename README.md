@@ -77,4 +77,4 @@ none
 
 ## License
 
-License: CC0
+License: cc0-1.0
