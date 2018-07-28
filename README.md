@@ -77,4 +77,4 @@ none
 
 ## License
 
-License: WTFPL
+License: CC0
