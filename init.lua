@@ -1,6 +1,9 @@
 poi_namefilter = {}
 poi_categories = {}
 
+-- Load support for intllib.
+local MP = minetest.get_modpath(minetest.get_current_modname())
+local S, NS = dofile(MP.."/intllib.lua")
 
 dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !
 dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/categories.lua")
@@ -31,7 +34,7 @@ local drop_down = 0
 local catlist = ""
 
 
-minetest.register_privilege("poi", "Player may set and manage Points of Interest.")
+minetest.register_privilege("poi", S("Player may set and manage Points of Interest."))
 
 
 --[[
@@ -68,7 +71,7 @@ function poi.list_filter(name)
 	end -- for key, value
 	
 	poi.print(name, list, orange)
-	poi.print(name, index .. " Filter in List.", green)
+	poi.print(name, index .. S(" Filter in List."), green)
 	
 end -- poi.list_filter()
 
@@ -83,7 +86,7 @@ function poi.list_categories(name)
 	end -- for key,value
 
 	poi.print(name, list, orange) -- Send List to Player
-	poi.print(name, index .. " Categories in List.", green) -- Send List to Player
+	poi.print(name, index .. S(" Categories in List."), green) -- Send List to Player
 
 end -- poi.list_categories()
 
@@ -127,10 +130,10 @@ function poi.list(name, option)
 	end
 	
 	if (idx > 0) then
-		poi.print(name, "Point's of Interest in Categorie " .. poi.get_categoriename(idx) .. " are:", green)
+		poi.print(name, S("Point's of Interest in Categorie ") .. poi.get_categoriename(idx) .. S(" are:"), green)
 	
 	else
-		poi.print(name, poi.count() .. " Point's of Interest are:", green)
+		poi.print(name, poi.count() .. S(" Point's of Interest are:"), green)
 	
 	end -- if(idx > 0)
 	
@@ -150,7 +153,7 @@ function poi.list(name, option)
 			
 		else -- if(idx > 0)
 			if all then
-				list = list .. key .. ": " .. pos .. " Categorie: " .. poi.get_categoriename(cat) .. "\n"
+				list = list .. key .. ": " .. pos .. S(" Categorie: ") .. poi.get_categoriename(cat) .. "\n"
 				
 			else
 				list = list .. key .. "\n"
@@ -182,7 +185,7 @@ function poi.set(name, poi_name)
 	if poi.exist(p_name) then -- Ups, Name exists
 		if(poi.get_categorie(p_name) ~= categorie) then -- ok, we want to change the Categorie
 			if(categorie == -1) then	-- Invalid Categoriename?
-				poi.print(name, "Given Categorie don't exists.", red)
+				poi.print(name, S("Given Categorie don't exists."), red)
 				return false
 				
 			end -- if(poi.get_categoriename())
@@ -191,13 +194,13 @@ function poi.set(name, poi_name)
 			local pos, cat
 			pos, cat = poi.split_pos_cat(poi.points[p_name])
 			poi.points[p_name] = pos .. "{" .. tonumber(categorie) .. "}" -- Changes the Entry
-			poi.print(name, name .. " has changed the POI: " .. p_name .. " at " .. pos .. " Categorie: " .. poi.get_categoriename(cat) .. " to Categorie: " .. poi.get_categoriename(categorie) .. "\n", log)
-			poi.print(name, "POI: " .. p_name .. " at " .. pos .." in Categorie: " .. poi.get_categoriename(cat) .." changed to Categorie: " .. poi.get_categoriename(categorie), green)
+			poi.print(name, name .. S(" has changed the POI: ") .. p_name .. S(" at ") .. pos .. S(" Categorie: ") .. poi.get_categoriename(cat) .. S(" to Categorie: ") .. poi.get_categoriename(categorie) .. "\n", log)
+			poi.print(name, "POI: " .. p_name .. S(" at ") .. pos .. S(" in Categorie: ") .. poi.get_categoriename(cat) .. S(" changed to Categorie: ") .. poi.get_categoriename(categorie), green)
 			poi.save()
 			return true
 			
 		else
-			poi.print(name, "PoI <" .. p_name .. "> in Categorie <" .. categorie .. " - " .. poi.get_categoriename(categorie) .. "> already exists.", red)
+			poi.print(name, "PoI <" .. p_name .. S("> in Categorie <") .. categorie .. " - " .. poi.get_categoriename(categorie) .. S("> already exists."), red)
 			return false -- Name exists, leave function
 			
 		end -- if(poi.get_categorie)
@@ -206,21 +209,21 @@ function poi.set(name, poi_name)
 
 	if not poi.check_name(p_name) then
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL		
-		poi.print(name, "Invalid or Forbidden Name <" .. p_name .. "> for PoI.", red)
+		poi.print(name, S("Invalid or Forbidden Name <") .. p_name .. S("> for PoI."), red)
 		return false
 
 	end -- if poi.check_name
 
 	if(categorie == -1) then  -- Checks invalid Categoriename, then set it on new Entry to 1
-		poi.print(name, "Warning: Unkown Categorie, set to Categorie 1.", red)
+		poi.print(name, S("Warning: Unkown Categorie, set to Categorie 1."), red)
 		categorie = 1
 	end
 	
 	poi.points[p_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(categorie) .. "}"-- Insert the new Entry
 	poi.save() -- and write the new List
 
-	poi.print(name, name .. " has set the POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .. " Categorie: {" .. poi.get_categoriename(categorie) .. "}\n", log)
-	poi.print(name, "POI: " .. p_name .. " at " .. minetest.pos_to_string(currpos) .." in Categorie: " .. poi.get_categoriename(categorie) .." stored.", green)
+	poi.print(name, name .. S(" has set the POI: ") .. p_name .. S(" at ") .. minetest.pos_to_string(currpos) .. S(" Categorie: ") .. "{" .. poi.get_categoriename(categorie) .. "}\n", log)
+	poi.print(name, "POI: " .. p_name .. S(" at ") .. minetest.pos_to_string(currpos) .. S(" in Categorie: ") .. poi.get_categoriename(categorie) .. S(" stored."), green)
 	return true
 
 end -- poi.set()
@@ -230,7 +233,7 @@ function poi.delete(name, poi_name)
 
 	if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
 	
-		poi.print(name, "Name of the PoI needed.", red)
+		poi.print(name, S("Name of the PoI needed."), red)
 		return false -- can't delete a non-existing Entry, leave function
 
 	end
@@ -238,7 +241,7 @@ function poi.delete(name, poi_name)
 	if poi.exist(poi_name) == false then
 
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL
-		poi.print(name,  "PoI <" .. poi_name .. "> unknown to delete.", red)
+		poi.print(name,  "PoI <" .. poi_name .. S("> unknown to delete."), red)
 		return false -- can't delete a non-existing Entry, leave function
 
 	end -- if poi.exist
@@ -248,8 +251,8 @@ function poi.delete(name, poi_name)
 	list = poi_name .. ": " .. poi.points[poi_name]	-- Get the full Name of the PoI and save it in a temporary var
 	poi.points[poi_name] = nil -- and delete it
 
-	poi.print(name, name .. " has deleted POI-Name: " .. list .. "\n", log)
-	poi.print(name, list .. " deleted.", red)
+	poi.print(name, name .. S(" has deleted POI-Name: ") .. list .. "\n", log)
+	poi.print(name, list .. S(" deleted."), red)
 	poi.save()	-- Write the new list at the server
 
 	return true
@@ -261,7 +264,7 @@ function poi.reload(name)
 	poi.points = nil -- Deletes the List of PoI's
 	poi.openlist() -- and Load it new
 
-	poi.print(name, "POI-List reloaded.", red)
+	poi.print(name, S("POI-List reloaded."), red)
 	return true
 
 end -- poi.reload()
@@ -271,7 +274,7 @@ function poi.jump(name, poi_name)
 
 	if (poi.exist(poi_name) == false) then -- Unknown or not existing Point of Interest
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL			
-		poi.print(name, "Unknown Point of Interest: " .. poi_name .. ".", red)
+		poi.print(name, S("Unknown Point of Interest: ") .. poi_name .. ".", red)
 		return false -- POI not in List, leave function
 
 	end -- if poi.exist
@@ -284,7 +287,7 @@ function poi.jump(name, poi_name)
 
 	poi.play_soundeffect(name, "teleport") -- Play's a Sound
 	player:setpos(minetest.string_to_pos(Position)) -- Move Player to Point
-	poi.print(name, "You are moved to POI: " .. poi_name .. ".", green)
+	poi.print(name, S("You are moved to POI: ") .. poi_name .. ".", green)
 	return true
 
 end -- poi.jump()
@@ -346,36 +349,36 @@ function poi.gui(player_name, showup, main)
 	end -- for key,value
 
 	if minetest.get_player_privs(player_name).poi then
-	    manageme = "button[5,6.5;2,1;poimanager;Manage_PoI]"
+	    manageme = "button[5,6.5;2,1;poimanager;" .. S("Manage_PoI]")
 	end
 		
 	if main then
 	      minetest.show_formspec(player_name,"minetest_poi:thegui",                            -- The main gui for everyone with interact
 				      "size[7,8]" ..
-				      "label[0.4,0;> Doubleclick on destination to teleport <]"..
+				      "label[0.4,0;> ".. S("Doubleclick on destination to teleport") .. " <]"..
 				      --showcat..
 				      "textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
-				      "label[0.6,6;".. count .. " Points in List]"..
-				      "label[4.3,0.5; Categories ]"..
+				      "label[0.6,6;".. count .. S(" Points in List]") ..
+				      "label[4.3,0.5; ".. S("Categories ]") ..
 				      "dropdown[4,1;2,1;dname;"..catlist..";"..drop_down.."]"..
-				      "button[0.4,6.5;1,1;poitelme;Go]"..
-				      "button[1.4,6.5;2,1;poishowall;ShowAll]"..manageme..
-				      "button_exit[0.4,7.4;3.4,1;poiexit;Quit]"
+				      "button[0.4,6.5;1,1;poitelme;".. S("Go]") ..
+				      "button[1.4,6.5;2,1;poishowall;" .. S("ShowAll]") ..manageme..
+				      "button_exit[0.4,7.4;3.4,1;poiexit;" .. S("Quit]")
 				      )
 	else
 	      minetest.show_formspec(player_name,"minetest_poi:manager",                            -- The management gui for people with poi priv
 				      "size[7,9]" ..
 				      "textlist[0.4,0;3,5;maname;"..list..";"..choosen_name..";false]"..
 				      "textlist[4,0;2,2;madname;"..catlist..";"..selected_category..";false]".. 
-				      "button[4,2.5;2,1;reload;Reload]"..
-				      "button[4,3.5;2,1;validate;Validate]"..
+				      "button[4,2.5;2,1;reload;" .. S("Reload") .. "]" ..
+				      "button[4,3.5;2,1;validate;" .. S("Validate") .. "]"..
 				      "field[0.3,5.4;7,1;managename;                                                                                      - enter name -;"..selected_point.."]"..
-				      "button[0.4,6;6,1;set;Set Point or change Categorie]"..
-				      "button[0.4,7;2,1;rename;Rename]"..
-				      "button[2.4,7;2,1;move;Move]"..
+				      "button[0.4,6;6,1;set;" .. S("Set Point or change Categorie") .. "]"..
+				      "button[0.4,7;2,1;rename;" .. S("Rename") .. "]"..
+				      "button[2.4,7;2,1;move;" .. S("Move") .. "]"..
 				      "image_button[5.4,7;1,1;minetest_poi_deleteme.png;delete;]"..
-				      "button_exit[0.4,8;3,1;doexit;Quit]"..
-				      "button[3.4,8;3,1;goback;Back]"
+				      "button_exit[0.4,8;3,1;doexit;" .. S("Quit") .. "]"..
+				      "button[3.4,8;3,1;goback;" .. S("Back") .. "]"
 				      )
 	end
 end -- poi.gui()
@@ -468,7 +471,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			poi.delete(player:get_player_name(),selected_point)
 			poi.gui(player:get_player_name(), nil, false)
 		      else
-			poi.print(player:get_player_name()," >>> Sorry this button is for admin only, please use /poi_delete "..selected_point,red)
+			poi.print(player:get_player_name(),S(" >>> Sorry this button is for admin only, please use /poi_delete ")..selected_point,red)
 		      end
 		end
 		
@@ -524,7 +527,7 @@ function poi.move(name, poi_name)
 
 	if (poi.exist(poi_name) == false) then
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL		
-		poi.print(name, "Unknown PoI <" .. poi_name .. ">.", red)
+		poi.print(name, S("Unknown PoI <") .. poi_name .. ">.", red)
 		return false
 
 	end -- if poi.exist
@@ -537,8 +540,8 @@ function poi.move(name, poi_name)
 	poi.points[poi_name] = minetest.pos_to_string(currpos) .. "{" .. tonumber(cat) .. "}" -- Write the Position new
 	poi.save() -- and write the List
 
-	poi.print(name, name .. " has moved the POI: " .. poi_name .. " at " .. oldpos ..  " to Position: " .. minetest.pos_to_string(currpos) .. "\n", log)
-	poi.print(name, "POI: " .. poi_name .. " at " .. oldpos .." moved to Position: " .. minetest.pos_to_string(currpos) .."\n", green)
+	poi.print(name, name .. S(" has moved the POI: ") .. poi_name .. S(" at ") .. oldpos ..  S(" to Position: ") .. minetest.pos_to_string(currpos) .. "\n", log)
+	poi.print(name, "POI: " .. poi_name .. S(" at ") .. oldpos .. S(" moved to Position: ") .. minetest.pos_to_string(currpos) .."\n", green)
 	return true
 
 end -- poi.move
@@ -548,26 +551,26 @@ function poi.rename(name, poi_name)
 	local oldname, newname
 
 	if string.find(poi_name, ",") == nil then
-		poi.print(name, "/poi_rename: No new Name for Point given.\n", red)
+		poi.print(name, S("/poi_rename: No new Name for Point given.") .. "\n", red)
 		return false
 	end
 
 	oldname = poi.trim(string.sub(poi_name,1, string.find(poi_name, ",")-1))
 
 	if not poi.exist(oldname) then
-		poi.print(name, "Point to rename not found.\n", red)
+		poi.print(name, S("Point to rename not found.") .. "\n", red)
 		return false
 	end
 
 	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
 
 	if not poi.check_name(newname) then
-		poi.print(name, "Invalid new Pointname.\n", red)
+		poi.print(name, S("Invalid new Pointname.") .. "\n", red)
 		return false
 	end
 
 	if poi.exist(newname) then
-		poi.print(name, "New Pointname already exists.\n", red)
+		poi.print(name, S("New Pointname already exists.") .. "\n", red)
 		return false
 	end
 
@@ -578,8 +581,8 @@ function poi.rename(name, poi_name)
 	poi.points[oldname] = nil -- now deletes the old one
 	poi.save()			-- saves the List
 	
-	poi.print(name, name .. " has renamed POI-Name: " .. oldname .. " to: " .. newname .. " - Position: " .. old_position .. "\n", log)
-	poi.print(name, "PoI-Name: " .. oldname .. " renamed to " .. newname .. " - Position: " .. old_position .. "\n", green)
+	poi.print(name, name .. S(" has renamed POI-Name: ") .. oldname .. S(" to: ") .. newname .. S(" - Position: ") .. old_position .. "\n", log)
+	poi.print(name, S("PoI-Name: ") .. oldname .. S(" renamed to ") .. newname ..  S(" - Position: ") .. old_position .. "\n", green)
 
 end -- poi.rename()
 
@@ -644,12 +647,12 @@ function poi.validate(name)
 	if (count > 0) or (invalid_cat > 0) then
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
 		poi.print(name, name .. " has found " .. invalid_cat .. " Entries with an invalid Categorie.\n", log)
-		poi.print(name, count .. " invalid PoI's found and deleted.", red)
-		poi.print(name, invalid_cat .. " PoI's with an invalid Categorie found and set to 1.", red)
+		poi.print(name, count .. S(" invalid PoI's found and deleted."), red)
+		poi.print(name, invalid_cat .. S(" PoI's with an invalid Categorie found and set to 1."), red)
 		poi.save()
 		
 	else
-		poi.print(name, "No invalid PoI found.\n", green)
+		poi.print(name, S("No invalid PoI found.") .. "\n", green)
 		
 	end
 					
@@ -921,8 +924,8 @@ end -- poi.convertnil()
 --]]
 
 minetest.register_chatcommand("poi_set", {
-	params = "<poi_name, Categorie[number]>",
-	description = "Set's a Point of Interest or changes the Categorie of an existing Point.",
+	params = S("<poi_name, Categorie[number]>"),
+	description = S("Set's a Point of Interest or changes the Categorie of an existing Point."),
 	privs = {poi = true},
 	func = function(name, poi_name)
 
@@ -933,7 +936,7 @@ minetest.register_chatcommand("poi_set", {
 
 minetest.register_chatcommand("poi_gui", {
 	params = "",
-	description = "Shows PoIs in a GUI.",
+	description = S("Shows PoIs in a GUI."),
 	privs = {interact = true},
 	func = function(name)
 
@@ -942,8 +945,8 @@ minetest.register_chatcommand("poi_gui", {
 	end,
 })
 minetest.register_chatcommand("poi_list", {
-	params = "<-a> <-c> <-f> <-i [Categorie[Number]]>",
-	description = "Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Categorie[number]]> shows only the Entries of the given Categorienumber or Name",
+	params = S("<-a> <-c> <-f> <-i [Categorie[Number]]>"),
+	description = S("Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Categorie[number]]> shows only the Entries of the given Categorienumber or Name"),
 	privs = {interact = true},
 	func = function(name, arg)
 
@@ -953,8 +956,8 @@ minetest.register_chatcommand("poi_list", {
 })
 
 minetest.register_chatcommand("poi_delete", {
-	params = "<poi_name>",
-	description = "Deletes a Point of Interest.",
+	params = S("<POI-Name>"),
+	description = S("Deletes a Point of Interest."),
 	privs = {poi = true},
 	func = function(name, poi_name)
 
@@ -965,7 +968,7 @@ minetest.register_chatcommand("poi_delete", {
 
 minetest.register_chatcommand("poi_reload", {
 	params = "",
-	description = "Loads the List of POI's new.",
+	description = S("Loads the List of POI's new."),
 	privs = {poi = true},
 	func = function(name)
 
@@ -976,8 +979,8 @@ minetest.register_chatcommand("poi_reload", {
 
 
 minetest.register_chatcommand("poi_jump", {
-	params = "<POI-Name>",
-	description = "Jumps to the Position of the Point of Interest.",
+	params = S("<POI-Name>"),
+	description = S("Jumps to the Position of the Point of Interest."),
 	privs = {interact = true},
 	func = function(name, poi_name)
 
@@ -987,8 +990,8 @@ minetest.register_chatcommand("poi_jump", {
 })
 
 minetest.register_chatcommand("poi_move", {
-	params = "<POI-Name>",
-	description = "Changes the Position of the Point of Interest.",
+	params = S("<POI-Name>"),
+	description = S("Changes the Position of the Point of Interest."),
 	privs = {interact = true},
 	func = function(name, poi_name)
 
@@ -998,8 +1001,8 @@ minetest.register_chatcommand("poi_move", {
 })
 
 minetest.register_chatcommand("poi_rename", {
-	params = "<POI Old Name>,<POI New Name>",
-	description = "Changes the Name of the Point of Interest.",
+	params = S("<POI Old Name>,<POI New Name>"),
+	description = S("Changes the Name of the Point of Interest."),
 	privs = {interact = true},
 	func = function(name, poi_name)
 
@@ -1010,7 +1013,7 @@ minetest.register_chatcommand("poi_rename", {
 
 minetest.register_chatcommand("poi_validate", {
 	params = "",
-	description = "Validates the List of PoI's.",
+	description = S("Validates the List of PoI's."),
 	privs = {poi = true},
 	func = function(name)
 
@@ -1025,7 +1028,7 @@ if (minetest.get_modpath("unified_inventory")) then
 	unified_inventory.register_button("minetest_poi", {
 		type = "image",
 		image = "minetest_poi_button_32x32.png",
-		tooltip = "Show Points of Interest",
+		tooltip = S("Show Points of Interest"),
 		hide_lite=true,
 		action = function(player)
 			local player_name = player:get_player_name()
@@ -1033,7 +1036,7 @@ if (minetest.get_modpath("unified_inventory")) then
 			if minetest.check_player_privs(player_name, {interact=true}) then
 			  poi.gui(player_name,nil,true)
 			else
-			  minetest.chat_send_player(player_name,core.colorize(red, "You need the")..core.colorize(green," interact")..core.colorize(red," priv, please type")..core.colorize(green," /rules")..core.colorize(red," and search for the keyword"))
+			  minetest.chat_send_player(player_name,core.colorize(red, S("You need the"))..core.colorize(green, S(" interact"))..core.colorize(red,S(" priv, please type"))..core.colorize(green,S(" /rules"))..core.colorize(red,S(" and search for the keyword")))
 			end
 		end,
 	})
@@ -1051,8 +1054,4 @@ poi.categories = poi_categories
 poi.max_categories = poi.count_categories()
 poi.build_cat_list()
 
-
-
-	
-
-
+print("[MOD] " .. minetest.get_current_modname() .. " loaded.")
