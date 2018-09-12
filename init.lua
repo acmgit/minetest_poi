@@ -992,7 +992,7 @@ minetest.register_chatcommand("poi_jump", {
 minetest.register_chatcommand("poi_move", {
 	params = S("<POI-Name>"),
 	description = S("Changes the Position of the Point of Interest."),
-	privs = {interact = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
 
 		poi.move(name, poi_name)
@@ -1003,7 +1003,7 @@ minetest.register_chatcommand("poi_move", {
 minetest.register_chatcommand("poi_rename", {
 	params = S("<POI Old Name>,<POI New Name>"),
 	description = S("Changes the Name of the Point of Interest."),
-	privs = {interact = true},
+	privs = {poi = true},
 	func = function(name, poi_name)
 
 		poi.rename(name, poi_name)
