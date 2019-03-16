@@ -330,7 +330,7 @@ function poi.gui(player_name, showup, main)
 	    call_list[count] = key  -- makes it easier to find jump point
 	  else
 	    drop_down = poi.get_categorienumber(showup)
-	    --showcat = "label[0.6,0.4;Categorie is : "..showup.."]" -- show choosen categorie in gui ##not needed anymore 
+	    --showcat = "label[0.6,0.4;Category is: "..showup.."]" -- show choosen categorie in gui ##not needed anymore 
 	    if poi.get_categorienumber(showup) == cat then
 	      if list == "" then
 	   
@@ -355,10 +355,10 @@ function poi.gui(player_name, showup, main)
 	if main then
 	      minetest.show_formspec(player_name,"minetest_poi:thegui",                            -- The main gui for everyone with interact
 				      "size[7,8]" ..
-				      "label[0.4,0;> ".. S("Doubleclick on destination to teleport") .. " <]"..
+				      "label[0.4,0;> ".. S("Double-click on destination to teleport") .. " <]"..
 				      --showcat..
 				      "textlist[0.4,1;3,5;name;"..list..";selected_idx;false]"..
-				      "label[0.6,6;".. count .. S(" Points in List]") ..
+				      "label[0.6,6;".. count .. S(" points in list]") ..
 				      "label[4.3,0.5; ".. S("Categories ]") ..
 				      "dropdown[4,1;2,1;dname;"..catlist..";"..drop_down.."]"..
 				      "button[0.4,6.5;1,1;poitelme;".. S("Go]") ..
