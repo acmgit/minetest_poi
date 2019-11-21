@@ -215,9 +215,7 @@ msgstr "Zurück"
 
 #: init.lua
 msgid " >>> Sorry this button is for admin only, please use /poi_delete "
-msgstr ""
-" >>> Tut mir leid, dieser Knopf ist nur für Admin, verwende stattdessen bitte"
-" /poi_delete "
+msgstr " Entschuldige, dieser Knopf ist nur für Admins, bitte verwende /poi_delete "
 
 #: init.lua
 msgid "Unknown PoI <"

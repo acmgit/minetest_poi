@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 17:48+0100\n"
+"POT-Creation-Date: 2019-11-21 22:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,62 +155,6 @@ msgstr ""
 
 #: init.lua
 msgid "You are moved to POI: "
-msgstr ""
-
-#: init.lua
-msgid "Manage_PoI]"
-msgstr ""
-
-#: init.lua
-msgid "Double-click on destination to teleport"
-msgstr ""
-
-#: init.lua
-msgid " points in list]"
-msgstr ""
-
-#: init.lua
-msgid "Categories ]"
-msgstr ""
-
-#: init.lua
-msgid "Go]"
-msgstr ""
-
-#: init.lua
-msgid "ShowAll]"
-msgstr ""
-
-#: init.lua
-msgid "Quit]"
-msgstr ""
-
-#: init.lua
-msgid "Reload"
-msgstr ""
-
-#: init.lua
-msgid "Validate"
-msgstr ""
-
-#: init.lua
-msgid "Set Point or change Categorie"
-msgstr ""
-
-#: init.lua
-msgid "Rename"
-msgstr ""
-
-#: init.lua
-msgid "Move"
-msgstr ""
-
-#: init.lua
-msgid "Quit"
-msgstr ""
-
-#: init.lua
-msgid "Back"
 msgstr ""
 
 #: init.lua
