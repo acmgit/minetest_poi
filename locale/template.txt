@@ -1,3 +1,4 @@
+# textdomain: poi
 General=
 Buildings=
 Markets=
