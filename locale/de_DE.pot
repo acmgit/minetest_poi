@@ -1,21 +1,53 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# acm <undertakers_help@yahoo.com>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-24 03:51+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-11-21 17:59+0100\n"
+"Last-Translator: acm <undertakers_help@yahoo.com>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 19.08.3\n"
+
+#: categories.lua
+msgid "General"
+msgstr "Allgemein"
+
+#: categories.lua
+msgid "Buildings"
+msgstr "Gebäude"
+
+#: categories.lua
+msgid "Markets"
+msgstr "Märkte"
+
+#: categories.lua
+msgid "Landscapes"
+msgstr "Landschaften"
+
+#: categories.lua
+msgid "Caves"
+msgstr "Höhlen"
+
+#: categories.lua
+msgid "Museums"
+msgstr "Museen"
+
+#: categories.lua
+msgid "Education"
+msgstr "Schulen"
+
+#: categories.lua
+msgid "Recreation"
+msgstr "Freizeit"
 
 #: init.lua
 msgid "Player may set and manage Points of Interest."
@@ -183,7 +215,9 @@ msgstr "Zurück"
 
 #: init.lua
 msgid " >>> Sorry this button is for admin only, please use /poi_delete "
-msgstr " >>> Tut mir leid, dieser Knopf ist nur für Admin, verwende stattdessen bitte /poi_delete "
+msgstr ""
+" >>> Tut mir leid, dieser Knopf ist nur für Admin, verwende stattdessen bitte"
+" /poi_delete "
 
 #: init.lua
 msgid "Unknown PoI <"
@@ -257,7 +291,8 @@ msgstr "<poi_name, Kategorie[nummer]>"
 msgid ""
 "Set's a Point of Interest or changes the Categorie of an existing Point."
 msgstr ""
-"Erstellt eine Sehenswürdigkeit oder verändert die Kategorie einer existierenden Sehenswürdigkeit."
+"Erstellt eine Sehenswürdigkeit oder verändert die Kategorie einer"
+" existierenden Sehenswürdigkeit."
 
 #: init.lua
 msgid "Shows PoIs in a GUI."
@@ -317,7 +352,7 @@ msgstr "Überprüft die Liste der PoI's."
 
 #: init.lua
 msgid "Show Points of Interest"
-msgstr "Zeit Sehenswürdigkeiten"
+msgstr "Zeige Sehenswürdigkeiten"
 
 #: init.lua
 msgid "You need the"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-24 04:05+0100\n"
+"POT-Creation-Date: 2019-11-21 17:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,38 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: categories.lua
+msgid "General"
+msgstr ""
+
+#: categories.lua
+msgid "Buildings"
+msgstr ""
+
+#: categories.lua
+msgid "Markets"
+msgstr ""
+
+#: categories.lua
+msgid "Landscapes"
+msgstr ""
+
+#: categories.lua
+msgid "Caves"
+msgstr ""
+
+#: categories.lua
+msgid "Museums"
+msgstr ""
+
+#: categories.lua
+msgid "Education"
+msgstr ""
+
+#: categories.lua
+msgid "Recreation"
+msgstr ""
 
 #: init.lua
 msgid "Player may set and manage Points of Interest."
@@ -130,11 +162,11 @@ msgid "Manage_PoI]"
 msgstr ""
 
 #: init.lua
-msgid "Doubleclick on destination to teleport"
+msgid "Double-click on destination to teleport"
 msgstr ""
 
 #: init.lua
-msgid " Points in List]"
+msgid " points in list]"
 msgstr ""
 
 #: init.lua

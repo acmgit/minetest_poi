@@ -1,21 +1,33 @@
 poi_namefilter = {}
 poi_categories = {}
 
--- Load support for intllib.
-local MP = minetest.get_modpath(minetest.get_current_modname())
-local S, NS = dofile(MP.."/intllib.lua")
-
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !
-dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/categories.lua")
-
 local storage = minetest.get_mod_storage()  -- initalize storage file of this mod. This can only happen here and should be always local
-local poi = {
+poi = {
 
 	points = {},
 	filter = {},
 	categories = {},
 	modpath = minetest.get_modpath(minetest.get_current_modname()),
+    modname = minetest.get_current_modname()
 }
+
+-- Load support for intllib.
+local S
+
+if(minetest.get_modpath("intllib")) then
+    S = dofile(poi.modpath .."/intllib.lua")
+    print("[MOD] " .. poi.modname .. ": translating in intllib-mode.")
+    
+else
+    S = minetest.get_translator("cucina_vegana")
+    print("[MOD] " .. poi.modname .. ": translating in minetest-mode.")
+    
+end -- if(minetest.get_modpath(
+
+poi.get_translator = S
+
+dofile(poi.modpath .. "/namefilter.lua")   -- avoid servercrash loop if someone decided to rename the modfolder !
+dofile(poi.modpath .. "/categories.lua")
 
 -- Options for Print_Message
 local log = 0
