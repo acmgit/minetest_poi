@@ -19,7 +19,7 @@ if(minetest.get_modpath("intllib")) then
     print("[MOD] " .. poi.modname .. ": translating in intllib-mode.")
     
 else
-    S = minetest.get_translator("cucina_vegana")
+    S = minetest.get_translator(poi.modname)
     print("[MOD] " .. poi.modname .. ": translating in minetest-mode.")
     
 end -- if(minetest.get_modpath(
