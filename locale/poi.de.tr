@@ -26,7 +26,7 @@ foo=foo
  >>> Sorry this button is for admin only, please use /poi_delete =  >>> Entschuldige, dieser Knopf ist nur für Admins, bitte verwende /poi_delete 
 
  Categorie: = Kategorie: 
- Categories in List.=Kategorien in Liste.
+ Categories in List.= Kategorien in Liste.
  Filter in List.=Filter in Liste.
  PoI's with an invalid Categorie found and set to 1.= PoI's mit ungültiger Kategorie gefunden und auf 1 gesetzt.
  Point's of Interest are:= Sehenswürdigkeiten sind:
@@ -44,6 +44,7 @@ foo=foo
  interact= interact
  invalid PoI's found and deleted.= ungültige PoI's gefunden und gelöscht.
  moved to Position: = verschoben zu Position: 
+ points in list= Punkte in Liste
  priv, please type= priv, bitte gib
  renamed to = umbenannt zu 
  stored.= gespeichert.
@@ -59,14 +60,21 @@ foo=foo
 > for PoI.=> für PoI.
 > in Categorie <=> in Kategorie <
 > unknown to delete.=> unbekannt um zu löschen.
+Back=Zurück
+Categories=Kategorien
 Changes the Name of the Point of Interest.=Verändert den Namen der Sehenswürdigkeit.
 Changes the Position of the Point of Interest.=Verändert die Position der Sehenswürdigkeit.
 Deletes a Point of Interest.=Löscht eine Sehenswürdigkeit.
+Double-click on destination to teleport=Doppelklick auf Ziel zum Teleportieren
+Enter Name=Namen eingeben
 Given Categorie don't exists.=Gegebene Kategorie gibt es nicht.
+Go=Los
 Invalid new Pointname.=Ungültiger neuer Punktnamen.
 Invalid or Forbidden Name <= Ungültiger oder verbotener Name <
 Jumps to the Position of the Point of Interest.=Springt zur Position der Sehenswürdigkeit.
 Loads the List of POI's new.=Lädt die Liste der POI's neu.
+Manage PoI=Verwalte PoI
+Move=Verschieben
 Name of the PoI needed.=Namen der Sehenswürdigkeit benötigt.
 New Pointname already exists.=Neuen Punktnamen gibt es bereits.
 No invalid PoI found.=Keinen ungültigen PoI gefunden.
@@ -75,36 +83,23 @@ Player may set and manage Points of Interest.=Spieler dürfen Sehenswürdigkeite
 PoI-Name: =PoI-Name: 
 Point to rename not found.=Punkt zum Umbenennen nicht gefunden.
 Point's of Interest in Categorie =Sehenswürdigkeiten in Kategorie 
+Quit=Ende
+Reload=Neu laden
+Rename=Umbenennen
+Set Point or change Categorie=Erstelle Punkt oder ändere die Kategorie
 
-Set's a Point of Interest or changes the Categorie of an existing Point.=
+Set's a Point of Interest or changes the Categorie of an existing Point.=Setzt eine Sehenswürdigkeit oder ändert die Kategorie einer existierenden Sehenswürdigkeit.
 
 Show Points of Interest=Zeige Sehenswürdigkeiten
+Show all=Zeige Alles
 Shows PoIs in a GUI.=Zeigt PoIs in einer GUI
 
-Shows Point's of Interest.@nOption -a shows Point's of Interest with Coordinates.@nOption -c shows you Categories.@nOption -f shows you the Namefilter@nOption -i <Categorie[number]]> shows only the Entries of the given Categorienumber or Name=
+Shows Point's of Interest.@nOption -a shows Point's of Interest with Coordinates.@nOption -c shows you Categories.@nOption -f shows you the Namefilter@nOption -i <Categorie[number]> shows only the Entries of the given Categorienumber or Name=Zeigt Sehenswürdigkeiten.@nOption -a zeigt Sehenswürdigkeit mit Koordinaten.@nOption -c zeigt die Kategorien.@nOption -f zeigt den Namensfilter.@nOption -i <Kategorie[nummer]> zeigt nur die Einträge der Kategorienummer oder Name
 
 Unknown PoI <=Unbekannter PoI <
 Unknown Point of Interest: =Unbekannte Sehenswürdigkeit: 
+Validate=Überprüfen
 Validates the List of PoI's.=Überprüft die Liste der PoI's.
 Warning: Unkown Categorie, set to Categorie 1.=Warnung: Unbekannte Kategorie, auf Kategorie 1 gesetzt.
 You are moved to POI: =Du wurdest verschoben zur Sehenswürdigkeit: 
 You need the=Du brauchst
-
-
-##### not used anymore #####
-
-Manage_PoI]=Verwalte PoI
- Points in List]= Punkte in Liste]
-Categories ]= Kategorien ]
-Go]=Los]
-ShowAll]=ZeigeAlles]
-Quit]=Ende]
-Doubleclick on destination to teleport=Doppelklick auf Ziel zum Teleportieren
-Reload=Neu laden
-Validate=Überprüfen
-Set Point or change Categorie=Erstelle Punkt oder ändere die Kategorie
-Rename=Umbenennen
-Move=Verschieben
-Quit=Ende
-Back=Zurück
- Unknown PoI <= Unbekannter PoI <
