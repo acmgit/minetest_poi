@@ -1,70 +1,91 @@
 # textdomain: poi
-General=
+
+
+### categories.lua ###
+
 Buildings=
-Markets=
-Landscapes=
 Caves=
-Museums=
 Education=
+# textdomain: poi
+General=
+Landscapes=
+Markets=
+Museums=
 Recreation=
-Player may set and manage Points of Interest.=
- Filter in List.=
- Categories in List.=
-Point's of Interest in Categorie =
- are:=
- Point's of Interest are:=
- Categorie: =
-Given Categorie don't exists.=
- has changed the POI: =
- at =
- to Categorie: =
- in Categorie: =
- changed to Categorie: =
-> in Categorie <=
-> already exists.=
-Invalid or Forbidden Name <=
-> for PoI.=
-Warning: Unkown Categorie, set to Categorie 1.=
- has set the POI: =
- stored.=
-Name of the PoI needed.=
-> unknown to delete.=
- has deleted POI-Name: =
- deleted.=
-POI-List reloaded.=
-Unknown Point of Interest: =
-You are moved to POI: =
- >>> Sorry this button is for admin only, please use /poi_delete =
-Unknown PoI <=
- has moved the POI: =
- to Position: =
- moved to Position: =
-/poi_rename: No new Name for Point given.=
-Point to rename not found.=
-Invalid new Pointname.=
-New Pointname already exists.=
- has renamed POI-Name: =
- to: =
+
+### findtext.lua ###
+
+bar=
+foo=
+
+### init.lua ###
+
  - Position: =
-PoI-Name: =
- renamed to =
- invalid PoI's found and deleted.=
+ /rules=
+
+ >>> Sorry this button is for admin only, please use /poi_delete =
+
+ Categorie: =
+ Categories in List.=
+ Filter in List.=
  PoI's with an invalid Categorie found and set to 1.=
-No invalid PoI found.=
-<poi_name, Categorie[number]>=
-Shows PoIs in a GUI.=
-<-a> <-c> <-f> <-i [Categorie[Number]]>=
-<POI-Name>=
-Deletes a Point of Interest.=
-Loads the List of POI's new.=
-Jumps to the Position of the Point of Interest.=
-Changes the Position of the Point of Interest.=
-<POI Old Name>,<POI New Name>=
-Changes the Name of the Point of Interest.=
-Validates the List of PoI's.=
-Show Points of Interest=
-You need the =
- interact =
- priv, please type=
- /rules =
+ Point's of Interest are:=
  and search for the keyword=
+ are:=
+ at =
+ changed to Categorie: =
+ deleted.=
+ has changed the POI: =
+ has deleted POI-Name: =
+ has moved the POI: =
+ has renamed POI-Name: =
+ has set the POI: =
+ in Categorie: =
+ interact=
+ invalid PoI's found and deleted.=
+ moved to Position: =
+ priv, please type=
+ renamed to =
+ stored.=
+ to Categorie: =
+ to Position: =
+ to: =
+/poi_rename: No new Name for Point given.=
+<-a> <-c> <-f> <-i [Categorie[Number]]>=
+<POI Old Name>,<POI New Name>=
+<POI-Name>=
+<poi_name, Categorie[number]>=
+> already exists.=
+> for PoI.=
+> in Categorie <=
+> unknown to delete.=
+Changes the Name of the Point of Interest.=
+Changes the Position of the Point of Interest.=
+Deletes a Point of Interest.=
+Given Categorie don't exists.=
+Invalid new Pointname.=
+Invalid or Forbidden Name <=
+Jumps to the Position of the Point of Interest.=
+Loads the List of POI's new.=
+Name of the PoI needed.=
+New Pointname already exists.=
+No invalid PoI found.=
+POI-List reloaded.=
+Player may set and manage Points of Interest.=
+PoI-Name: =
+Point to rename not found.=
+Point's of Interest in Categorie =
+
+Set's a Point of Interest or changes the Categorie of an existing Point.=
+
+Show Points of Interest=
+Shows PoIs in a GUI.=
+
+Shows Point's of Interest.@nOption -a shows Point's of Interest with Coordinates.@nOption -c shows you Categories.@nOption -f shows you the Namefilter@nOption -i <Categorie[number]]> shows only the Entries of the given Categorienumber or Name=
+
+Unknown PoI <=
+Unknown Point of Interest: =
+Validates the List of PoI's.=
+Warning: Unkown Categorie, set to Categorie 1.=
+You are moved to POI: =
+You need the=
