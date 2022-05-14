@@ -51,7 +51,7 @@ msgstr "Freizeit"
 
 #: init.lua
 msgid "Player may set and manage Points of Interest."
-msgstr "Spieler dürfen Sehenswürdigkeiten setzen und verwalten."
+msgstr "Spieler dürfen interessante Orte setzen und verwalten."
 
 #: init.lua
 msgid " Filter in List."
@@ -62,63 +62,63 @@ msgid " Categories in List."
 msgstr "Kategorien in Liste."
 
 #: init.lua
-msgid "Point's of Interest in Categorie "
-msgstr "Sehenswürdigkeiten in Kategorie "
+msgid "Points of Interest in category "
+msgstr "Interessanter Punkt in Kategorie "
 
 #: init.lua
 msgid " are:"
 msgstr " sind:"
 
 #: init.lua
-msgid " Point's of Interest are:"
-msgstr " Sehenswürdigkeiten sind:"
+msgid " Points of Interest are:"
+msgstr " Interessante Punkte sind:"
 
 #: init.lua
-msgid " Categorie: "
+msgid " Category: "
 msgstr " Kategorie: "
 
 #: init.lua
-msgid "Given Categorie don't exists."
-msgstr "Gegebene Kategorie gibt es nicht."
+msgid "Given category doesn't exist."
+msgstr "Angegebene Kategorie existiert nicht."
 
 #: init.lua
 msgid " has changed the POI: "
-msgstr " veränderte den POI: "
+msgstr " hat folgenden POI verändert: "
 
 #: init.lua
 msgid " at "
 msgstr " bei "
 
 #: init.lua
-msgid " to Categorie: "
+msgid " to category: "
 msgstr " zur Kategorie: "
 
 #: init.lua
-msgid " in Categorie: "
+msgid " in category: "
 msgstr " in der Kategorie: "
 
 #: init.lua
-msgid " changed to Categorie: "
+msgid " changed to category: "
 msgstr " verändert zur Kategorie: "
 
 #: init.lua
-msgid "> in Categorie <"
+msgid "> in category <"
 msgstr "> in Kategorie <"
 
 #: init.lua
 msgid "> already exists."
-msgstr "> gibts es bereits."
+msgstr "> gibt es bereits."
 
 #: init.lua
 msgid "Invalid or Forbidden Name <"
 msgstr " Ungültiger oder verbotener Name <"
 
 #: init.lua
-msgid "> for PoI."
-msgstr "> für PoI."
+msgid "> for POI."
+msgstr "> für POI."
 
 #: init.lua
-msgid "Warning: Unkown Categorie, set to Categorie 1."
+msgid "Warning: Unkown category, setting to category 1."
 msgstr "Warnung: Unbekannte Kategorie, auf Kategorie 1 gesetzt."
 
 #: init.lua
@@ -130,8 +130,8 @@ msgid " stored."
 msgstr " gespeichert."
 
 #: init.lua
-msgid "Name of the PoI needed."
-msgstr "Namen der Sehenswürdigkeit benötigt."
+msgid "Name of the POI needed."
+msgstr "Name des POI benötigt."
 
 #: init.lua
 msgid "> unknown to delete."
@@ -139,7 +139,7 @@ msgstr "> unbekannt um zu löschen."
 
 #: init.lua
 msgid " has deleted POI-Name: "
-msgstr " löschte POI-Name: "
+msgstr " hat folgenden POI gelöscht: "
 
 #: init.lua
 msgid " deleted."
@@ -151,15 +151,15 @@ msgstr "POI-Liste neu geladen."
 
 #: init.lua
 msgid "Unknown Point of Interest: "
-msgstr "Unbekannte Sehenswürdigkeit: "
+msgstr "Unbekannter interessanter Ort: "
 
 #: init.lua
 msgid "You are moved to POI: "
-msgstr "Du wurdest verschoben zur Sehenswürdigkeit: "
+msgstr "Du wurdest zu folgendem POI teleportiert: "
 
 #: init.lua
 msgid "Manage_PoI]"
-msgstr "Verwalte PoI"
+msgstr "Verwalte POI"
 
 #: init.lua
 msgid " Points in List]"
@@ -194,7 +194,7 @@ msgid "Validate"
 msgstr "Überprüfen"
 
 #: init.lua
-msgid "Set Point or change Categorie"
+msgid "Set Point or change category"
 msgstr "Erstelle Punkt oder ändere die Kategorie"
 
 #: init.lua
@@ -218,12 +218,12 @@ msgid " >>> Sorry this button is for admin only, please use /poi_delete "
 msgstr " Entschuldige, dieser Knopf ist nur für Admins, bitte verwende /poi_delete "
 
 #: init.lua
-msgid "Unknown PoI <"
-msgstr "Unbekannter PoI <"
+msgid "Unknown POI <"
+msgstr "Unbekannter POI <"
 
 #: init.lua
 msgid " has moved the POI: "
-msgstr " verschob den POI: "
+msgstr " hat folgenden POI verschoben: "
 
 #: init.lua
 msgid " to Position: "
@@ -234,7 +234,7 @@ msgid " moved to Position: "
 msgstr " verschoben zu Position: "
 
 #: init.lua
-msgid "/poi_rename: No new Name for Point given."
+msgid "/poi_rename: No new name for Point given."
 msgstr "/poi_rename: Keinen neuen Namen für Punkt angegeben."
 
 #: init.lua
@@ -242,16 +242,16 @@ msgid "Point to rename not found."
 msgstr "Punkt zum Umbenennen nicht gefunden."
 
 #: init.lua
-msgid "Invalid new Pointname."
-msgstr "Ungültiger neuer Punktnamen."
+msgid "New name of POI is invalid."
+msgstr "Neuer Name für POI ist ungültig."
 
 #: init.lua
-msgid "New Pointname already exists."
-msgstr "Neuen Punktnamen gibt es bereits."
+msgid "New name of POI already exists."
+msgstr "Neuer Name für POI existiert bereits."
 
 #: init.lua
 msgid " has renamed POI-Name: "
-msgstr "hat POI-Name umbenannt: "
+msgstr "hat folgenden POI umbenannt: "
 
 #: init.lua
 msgid " to: "
@@ -262,39 +262,39 @@ msgid " - Position: "
 msgstr " - Position: "
 
 #: init.lua
-msgid "PoI-Name: "
-msgstr "PoI-Name: "
+msgid "POI-Name: "
+msgstr "POI-Name: "
 
 #: init.lua
 msgid " renamed to "
 msgstr " umbenannt zu "
 
 #: init.lua
-msgid " invalid PoI's found and deleted."
-msgstr " ungültige PoI's gefunden und gelöscht."
+msgid " invalid POIs found and deleted."
+msgstr " ungültige POIs gefunden und gelöscht."
 
 #: init.lua
-msgid " PoI's with an invalid Categorie found and set to 1."
-msgstr " PoI's mit ungültiger Kategorie gefunden und auf 1 gesetzt."
+msgid " POIs with an invalid category found and set to 1."
+msgstr " POIs mit ungültiger Kategorie gefunden und auf 1 gesetzt."
 
 #: init.lua
-msgid "No invalid PoI found."
-msgstr "Keinen ungültigen PoI gefunden."
+msgid "No invalid POI found."
+msgstr "Keinen ungültigen POI gefunden."
 
 #: init.lua
-msgid "<poi_name, Categorie[number]>"
+msgid "<poi_name, category[number]>"
 msgstr "<poi_name, Kategorie[nummer]>"
 
 #: init.lua
 msgid ""
-"Set's a Point of Interest or changes the Categorie of an existing Point."
+"Sets a Point of Interest or changes the category of an existing point."
 msgstr ""
-"Erstellt eine Sehenswürdigkeit oder verändert die Kategorie einer"
-" existierenden Sehenswürdigkeit."
+"Erstellt einen interessanten Ort oder verändert die Kategorie eines"
+" existierenden interessanten Ortes."
 
 #: init.lua
-msgid "Shows PoIs in a GUI."
-msgstr "Zeigt PoIs in einer GUI"
+msgid "Shows POIs in a GUI."
+msgstr "Zeigt POIs in einer GUI"
 
 #: init.lua
 msgid "<-a> <-c> <-f> <-i [Categorie[Number]]>"
@@ -302,15 +302,15 @@ msgstr "<-a> <-c> <-f> <-i [Kategorie[Nummer]]>"
 
 #: init.lua
 msgid ""
-"Shows Point's of Interest.\n"
-"Option -a shows Point's of Interest with Coordinates.\n"
+"Shows Points of Interest.\n"
+"Option -a shows Points of Interest with Coordinates.\n"
 "Option -c shows you Categories.\n"
 "Option -f shows you the Namefilter\n"
 "Option -i <Categorie[number]]> shows only the Entries of the given "
 "Categorienumber or Name"
 msgstr ""
-"Zeigt Sehenswürdigkeiten.\n"
-"Option -a zeigt Sehenswürdigkeiten mit Koordinaten.\n"
+"Zeigt interessante Orte.\n"
+"Option -a zeigt interessante Orte mit Koordinaten.\n"
 "Option -c zeigt dir die Kategorien.\n"
 "Option -f zeigt dir den Namensfilter\n"
 "Option -i <Kategorie[nummer]]> zeigt nur die Einträge der gegebenen "
@@ -322,19 +322,19 @@ msgstr "<POI-Name>"
 
 #: init.lua
 msgid "Deletes a Point of Interest."
-msgstr "Löscht eine Sehenswürdigkeit."
+msgstr "Löscht einen interessanten Ort."
 
 #: init.lua
-msgid "Loads the List of POI's new."
-msgstr "Lädt die Liste der POI's neu."
+msgid "Reloads the list of POIs."
+msgstr "Lädt die Liste der POIs neu."
 
 #: init.lua
 msgid "Jumps to the Position of the Point of Interest."
-msgstr "Springt zur Position der Sehenswürdigkeit."
+msgstr "Springt zur Position des interessanten Ortes."
 
 #: init.lua
 msgid "Changes the Position of the Point of Interest."
-msgstr "Verändert die Position der Sehenswürdigkeit."
+msgstr "Verändert die Position des interessanten Ortes."
 
 #: init.lua
 msgid "<POI Old Name>,<POI New Name>"
@@ -342,19 +342,19 @@ msgstr "<POI alter Name>,<POI neuer Name>"
 
 #: init.lua
 msgid "Changes the Name of the Point of Interest."
-msgstr "Verändert den Namen der Sehenswürdigkeit."
+msgstr "Verändert den Namen interessanten Ortes."
 
 #: init.lua
-msgid "Validates the List of PoI's."
-msgstr "Überprüft die Liste der PoI's."
+msgid "Validates the List of POIs."
+msgstr "Überprüft die Liste der POIs."
 
 #: init.lua
 msgid "Show Points of Interest"
-msgstr "Zeige Sehenswürdigkeiten"
+msgstr "Zeige interessante Orte"
 
 #: init.lua
 msgid "You need the"
-msgstr "Du brauchst"
+msgstr "Du brauchst das"
 
 #: init.lua
 msgid " interact"
@@ -362,7 +362,7 @@ msgstr " interact"
 
 #: init.lua
 msgid " priv, please type"
-msgstr " priv, bitte gib"
+msgstr "-Privileg, bitte gib"
 
 #: init.lua
 msgid " /rules"
@@ -370,4 +370,4 @@ msgstr " /rules"
 
 #: init.lua
 msgid " and search for the keyword"
-msgstr " und suche nach dem Schlüsselwort"
+msgstr " ein und suche nach dem Schlüsselwort"
