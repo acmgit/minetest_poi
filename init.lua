@@ -142,10 +142,10 @@ function poi.list(name, option)
 	end
 
 	if (idx > 0) then
-		poi.print(name, S("Point's of Interest in Categorie ") .. poi.get_categoriename(idx) .. S(" are:"), green)
+		poi.print(name, S("Points of Interest in category ") .. poi.get_categoriename(idx) .. S(" are:"), green)
 
 	else
-		poi.print(name, poi.count() .. S(" Point's of Interest are:"), green)
+		poi.print(name, poi.count() .. S(" Points of Interest are:"), green)
 
 	end -- if(idx > 0)
 
@@ -165,7 +165,7 @@ function poi.list(name, option)
 
 		else -- if(idx > 0)
 			if all then
-				list = list .. key .. ": " .. pos .. S(" Categorie: ") .. poi.get_categoriename(cat) .. "\n"
+				list = list .. key .. ": " .. pos .. S(" Category: ") .. poi.get_categoriename(cat) .. "\n"
 
 			else
 				list = list .. key .. "\n"
@@ -198,7 +198,7 @@ function poi.set(name, poi_name)
 	if poi.exist(p_name) then -- Ups, Name exists
 		if(poi.get_categorie(p_name) ~= categorie) then -- ok, we want to change the Categorie
 			if(categorie == -1) then	-- Invalid Categoriename?
-				poi.print(name, S("Given Categorie don't exists."), red)
+				poi.print(name, S("Given category doesn't exist."), red)
 				return false
 
 			end -- if(poi.get_categoriename())
@@ -207,13 +207,13 @@ function poi.set(name, poi_name)
 			local pos, cat
 			pos, cat, dir = poi.split_pos_cat(poi.points[p_name])
 			poi.points[p_name] = poi.combine_pos_cat(pos, categorie, dir) -- Changes the Entry
-			poi.print(name, name .. S(" has changed the POI: ") .. p_name .. S(" at ") .. pos .. S(" Categorie: ") .. poi.get_categoriename(cat) .. S(" to Categorie: ") .. poi.get_categoriename(categorie) .. "\n", log)
-			poi.print(name, "POI: " .. p_name .. S(" at ") .. pos .. S(" in Categorie: ") .. poi.get_categoriename(cat) .. S(" changed to Categorie: ") .. poi.get_categoriename(categorie), green)
+			poi.print(name, name .. S(" has changed the POI: ") .. p_name .. S(" at ") .. pos .. S(" category: ") .. poi.get_categoriename(cat) .. S(" to category: ") .. poi.get_categoriename(categorie) .. "\n", log)
+			poi.print(name, "POI: " .. p_name .. S(" at ") .. pos .. S(" in category: ") .. poi.get_categoriename(cat) .. S(" changed to category: ") .. poi.get_categoriename(categorie), green)
 			poi.save()
 			return true
 
 		else
-			poi.print(name, "PoI <" .. p_name .. S("> in Categorie <") .. categorie .. " - " .. poi.get_categoriename(categorie) .. S("> already exists."), red)
+			poi.print(name, "PoI <" .. p_name .. S("> in category <") .. categorie .. " - " .. poi.get_categoriename(categorie) .. S("> already exists."), red)
 			return false -- Name exists, leave function
 
 		end -- if(poi.get_categorie)
@@ -222,13 +222,13 @@ function poi.set(name, poi_name)
 
 	if not poi.check_name(p_name) then
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL
-		poi.print(name, S("Invalid or Forbidden Name <") .. p_name .. S("> for PoI."), red)
+		poi.print(name, S("Invalid or Forbidden Name <") .. p_name .. S("> for POI."), red)
 		return false
 
 	end -- if poi.check_name
 
 	if(categorie == -1) then  -- Checks invalid Categoriename, then set it on new Entry to 1
-		poi.print(name, S("Warning: Unkown Categorie, set to Categorie 1."), red)
+		poi.print(name, S("Warning: Unkown category, setting to category 1."), red)
 		categorie = 1
 	end
 
@@ -246,7 +246,7 @@ function poi.delete(name, poi_name)
 
 	if(poi_name == nil or poi_name == "") then  -- No PoI-Name given ..
 
-		poi.print(name, S("Name of the PoI needed."), red)
+		poi.print(name, S("Name of the POI needed."), red)
 		return false -- can't delete a non-existing Entry, leave function
 
 	end
@@ -391,7 +391,7 @@ function poi.gui(player_name, showup, main)
 				      "button[4,2.5;2,1;reload;" .. S("Reload") .. "]" ..
 				      "button[4,3.5;2,1;validate;" .. S("Validate") .. "]"..
 				      "field[0.3,5.4;7,1;managename;                                                                                      - ".. S("Enter Name").." -;"..selected_point.."]"..
-				      "button[0.4,6;6,1;set;" .. S("Set Point or change Categorie") .. "]"..
+				      "button[0.4,6;6,1;set;" .. S("Set Point or change category") .. "]"..
 				      "button[0.4,7;2,1;rename;" .. S("Rename") .. "]"..
 				      "button[2.4,7;2,1;move;" .. S("Move") .. "]"..
 				      "image_button[5.4,7;1,1;minetest_poi_deleteme.png;delete;]"..
@@ -545,7 +545,7 @@ function poi.move(name, poi_name)
 
 	if (poi.exist(poi_name) == false) then
 		poi_name = poi.convertnil(poi_name) -- convert possible NIL
-		poi.print(name, S("Unknown PoI <") .. poi_name .. ">.", red)
+		poi.print(name, S("Unknown POI <") .. poi_name .. ">.", red)
 		return false
 
 	end -- if poi.exist
@@ -570,7 +570,7 @@ function poi.rename(name, poi_name)
 	local oldname, newname
 
 	if string.find(poi_name, ",") == nil then
-		poi.print(name, S("/poi_rename: No new Name for Point given.") .. "\n", red)
+		poi.print(name, S("/poi_rename: No new name for Point given.") .. "\n", red)
 		return false
 	end
 
@@ -584,12 +584,12 @@ function poi.rename(name, poi_name)
 	newname = poi.trim(string.sub(poi_name, string.find(poi_name, ",") + 1, -1))
 
 	if not poi.check_name(newname) then
-		poi.print(name, S("Invalid new Pointname.") .. "\n", red)
+		poi.print(name, S("New name of POI is invalid.") .. "\n", red)
 		return false
 	end
 
 	if poi.exist(newname) then
-		poi.print(name, S("New Pointname already exists.") .. "\n", red)
+		poi.print(name, S("New name of POI already exists.") .. "\n", red)
 		return false
 	end
 
@@ -601,7 +601,7 @@ function poi.rename(name, poi_name)
 	poi.save()			-- saves the List
 
 	poi.print(name, name .. S(" has renamed POI-Name: ") .. oldname .. S(" to: ") .. newname .. S(" - Position: ") .. old_position .. "\n", log)
-	poi.print(name, S("PoI-Name: ") .. oldname .. S(" renamed to ") .. newname ..  S(" - Position: ") .. old_position .. "\n", green)
+	poi.print(name, S("POI-Name: ") .. oldname .. S(" renamed to ") .. newname ..  S(" - Position: ") .. old_position .. "\n", green)
 
 end -- poi.rename()
 
@@ -666,12 +666,12 @@ function poi.validate(name)
 	if (count > 0) or (invalid_cat > 0) then
 		poi.print(name, name .. " has deleted with validate " .. count .. " PoI's.\n", log)
 		poi.print(name, name .. " has found " .. invalid_cat .. " Entries with an invalid Categorie.\n", log)
-		poi.print(name, count .. S(" invalid PoI's found and deleted."), red)
-		poi.print(name, invalid_cat .. S(" PoI's with an invalid Categorie found and set to 1."), red)
+		poi.print(name, count .. S(" invalid POIs found and deleted."), red)
+		poi.print(name, invalid_cat .. S(" POIs with an invalid category found and set to 1."), red)
 		poi.save()
 
 	else
-		poi.print(name, S("No invalid PoI found.") .. "\n", green)
+		poi.print(name, S("No invalid POI found.") .. "\n", green)
 
 	end
 
@@ -979,8 +979,8 @@ end -- poi.convertnil()
 --]]
 
 minetest.register_chatcommand("poi_set", {
-	params = S("<poi_name, Categorie[number]>"),
-	description = S("Set's a Point of Interest or changes the Categorie of an existing Point."),
+	params = S("<poi_name, category[number]>"),
+	description = S("Sets a Point of Interest or changes the category of an existing point."),
 	privs = {poi = true},
 	func = function(name, poi_name)
 
@@ -991,7 +991,7 @@ minetest.register_chatcommand("poi_set", {
 
 minetest.register_chatcommand("poi_gui", {
 	params = "",
-	description = S("Shows PoIs in a GUI."),
+	description = S("Shows POIs in a GUI."),
 	privs = {interact = true},
 	func = function(name)
 
@@ -1001,7 +1001,7 @@ minetest.register_chatcommand("poi_gui", {
 })
 minetest.register_chatcommand("poi_list", {
 	params = S("<-a> <-c> <-f> <-i [Categorie[Number]]>"),
-	description = S("Shows Point's of Interest.\nOption -a shows Point's of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Categorie[number]> shows only the Entries of the given Categorienumber or Name"),
+	description = S("Shows Points of Interest.\nOption -a shows Points of Interest with Coordinates.\nOption -c shows you Categories.\nOption -f shows you the Namefilter\nOption -i <Categorie[number]> shows only the Entries of the given Categorienumber or Name"),
 	privs = {interact = true},
 	func = function(name, arg)
 
@@ -1023,7 +1023,7 @@ minetest.register_chatcommand("poi_delete", {
 
 minetest.register_chatcommand("poi_reload", {
 	params = "",
-	description = S("Loads the List of POI's new."),
+	description = S("Reloads the list of POIs."),
 	privs = {poi = true},
 	func = function(name)
 
@@ -1068,7 +1068,7 @@ minetest.register_chatcommand("poi_rename", {
 
 minetest.register_chatcommand("poi_validate", {
 	params = "",
-	description = S("Validates the List of PoI's."),
+	description = S("Validates the List of POIs."),
 	privs = {poi = true},
 	func = function(name)
 
